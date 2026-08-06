@@ -654,7 +654,6 @@ async function saveMediaForm(tab, mode, id) {
             const title = document.getElementById('media-title').value.trim();
             const category = document.getElementById('media-category').value.trim();
             const duration = document.getElementById('media-duration').value.trim();
-            const vidInput = document.getElementById('media-video-file');
             const description = document.getElementById('media-description').value.trim();
             const publish_date = document.getElementById('media-publish-date').value || null;
             const featured = document.getElementById('media-featured').checked;
@@ -701,8 +700,7 @@ async function saveMediaForm(tab, mode, id) {
             const featured = document.getElementById('media-featured').checked;
 
             // Require audio file or streaming URL
-            const audioInput = document.getElementById('media-audio-file');
-            const hasUploadedAudio = audioInput && audioInput.files && audioInput.files[0];
+            const hasUploadedAudio = document.getElementById('media-audio-file')?.files?.[0];
             if (!hasUploadedAudio && !streaming_url) return alert('Please provide an audio file or a streaming URL.');
             if (streaming_url && !isValidHttpUrl(streaming_url)) return alert('Please provide a valid streaming URL (http/https).');
 
