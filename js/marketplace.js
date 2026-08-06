@@ -175,7 +175,7 @@ function renderListingsGrid(listings) {
 
     grid.innerHTML = listings.map(item => {
         // Enforce fallback image if none are resolved
-        const primaryImage = item.images && item.images.length > 0 ? item.images[0] : '../assets/Icon.png';
+        const primaryImage = item.images && item.images.length > 0 ? item.images[0] : '../assets/Icon.png?v=2';
         
         // Reminder block on owner listing view
         const isOwner = currentUser && currentUser.id === item.seller_id;

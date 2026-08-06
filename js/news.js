@@ -493,7 +493,7 @@ function renderNewsGrid(articles) {
 }
 
 function buildEditorialHeroCard(item) {
-    const primaryImage = item.image_url || '../assets/Icon.png';
+    const primaryImage = item.image_url || '../assets/Icon.png?v=2';
     const summaryText = String(item.summary || item.content || '').replace(/<[^>]*>/g, '').slice(0, 180);
     const formattedDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const badge = item.is_breaking ? '<span class="meta">Breaking</span>' : '<span class="meta">Featured</span>';
@@ -511,7 +511,7 @@ function buildEditorialHeroCard(item) {
 }
 
 function buildEditorialStackCard(item) {
-    const primaryImage = item.image_url || '../assets/Icon.png';
+    const primaryImage = item.image_url || '../assets/Icon.png?v=2';
     const summaryText = String(item.summary || item.content || '').replace(/<[^>]*>/g, '').slice(0, 120);
     const formattedDate = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     const categoryLabel = item.category_name || item.category || 'General';
@@ -847,7 +847,7 @@ function submitLocalComment(articleId, body, parentId = null) {
         is_local: true,
         user: {
             full_name: 'Guest Reader',
-            profile_photo: '../assets/Icon.png'
+            profile_photo: '../assets/Icon.png?v=2'
         }
     };
     comments.unshift(comment);
@@ -899,7 +899,7 @@ function getShareIcon(type) {
 }
 
 function renderCommentItem(comment, isOwner, articleId) {
-    const avatar = comment.user?.profile_photo || '../assets/Icon.png';
+    const avatar = comment.user?.profile_photo || '../assets/Icon.png?v=2';
     const createdAt = new Date(comment.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
     const replyClass = comment.parent_id ? 'is-reply' : '';
     const likeLabel = comment.likedByMe ? '★ Liked' : '☆ Like';
@@ -1137,7 +1137,7 @@ function renderRelatedArticles(container, relatedArticles) {
         return;
     }
     container.innerHTML = relatedArticles.map(item => {
-        const image = item.image_url || '../assets/Icon.png';
+        const image = item.image_url || '../assets/Icon.png?v=2';
         const summaryText = String(item.summary || item.content || '').replace(/<[^>]*>/g, '').slice(0, 110);
         const pubDate = item.created_at ? new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
         return `

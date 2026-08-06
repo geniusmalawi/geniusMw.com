@@ -446,7 +446,7 @@ function openProfileModal(mode = 'overview') {
             </div>
             <div class="msofi-account-card" style="margin-bottom:12px;">
                 <div class="msofi-account-actions-inline" style="margin-bottom:10px; align-items:center;">
-                    <img class="msofi-account-photo-preview" src="${profilePhoto || '../assets/Icon.png'}" alt="Profile preview">
+                    <img class="msofi-account-photo-preview" src="${profilePhoto || '../assets/Icon.png?v=2'}" alt="Profile preview">
                     <div style="flex:1; min-width:140px;">
                         <p><strong>${escapeHtml(fullName)}</strong></p>
                         <p>${escapeHtml(username ? `@${username}` : '')}</p>
@@ -1269,7 +1269,7 @@ function showConversationWelcomeCard() {
 
     viewport.innerHTML = `
         <div id="welcome-message-card" style="max-width: 650px; margin: 40px auto 0; text-align: center; animation: fadeIn 0.6s ease;">
-            <img src="../assets/Icon.png" alt="Msofi AI Icon" style="width: 80px; height: 80px; margin: 0 auto 16px;">
+            <img src="../assets/Icon.png?v=2" alt="Msofi AI Icon" style="width: 80px; height: 80px; margin: 0 auto 16px;">
             <h2 style="font-size: 28px; margin-bottom: 12px; color: #000000;">Meet Msofi AI</h2>
             <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 24px;">
                 Msofi is your specialized super intelligence trained to deliver premium academic, business, and operational insights. Explore various utility modes tailored to assist you.
@@ -1737,7 +1737,7 @@ function refreshProfileUI() {
     if (sidebarProfilePlan) sidebarProfilePlan.textContent = isPremium ? 'Pro' : 'Free';
 
     if (profilePreview) {
-        profilePreview.src = profilePhoto || '../assets/Icon.png';
+        profilePreview.src = profilePhoto || '../assets/Icon.png?v=2';
     }
 }
 
@@ -2274,7 +2274,7 @@ function buildLibrarySelectionListHtml(results, query) {
 
 function getLibraryPreviewImageUrl(item) {
     const previewUrl = item?.thumbnail || item?.image_url || item?.cover_url || item?.image || item?.preview_url || item?.preview_image || '';
-    return typeof previewUrl === 'string' && previewUrl.trim() ? previewUrl.trim() : '../assets/Icon.png';
+    return typeof previewUrl === 'string' && previewUrl.trim() ? previewUrl.trim() : '../assets/Icon.png?v=2';
 }
 
 async function buildLibrarySelectionResultHtml(item) {

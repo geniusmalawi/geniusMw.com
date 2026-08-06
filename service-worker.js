@@ -1,4 +1,4 @@
-const CACHE_NAME = 'genius-malawi-cache-v1';
+const CACHE_NAME = 'genius-malawi-cache-v2';
 const CACHE_ASSETS = [
     '/',
     '/index.html',
@@ -7,8 +7,8 @@ const CACHE_ASSETS = [
     '/js/app.js',
     '/js/advertising.js',
     '/js/pwa-install.js',
-    '/assets/Icon.png',
-    '/assets/Logo.png'
+    '/assets/Icon.png?v=2',
+    '/assets/Logo.png?v=2'
 ];
 
 self.addEventListener('install', (event) => {

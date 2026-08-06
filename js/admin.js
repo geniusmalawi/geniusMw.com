@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try { initializeBusinessPagesModule(); } catch (err) { console.warn('Business pages module unavailable:', err?.message || err); }
         try { await initializeJobsModule(); } catch (err) { console.warn('Jobs module unavailable:', err?.message || err); }
         try { setupMarketplaceAdminRealtime(); } catch (err) { console.warn('Marketplace admin sync unavailable:', err?.message || err); }
-        try { setupFootballAdminRealtime(); } catch (err) { console.warn('Football admin sync unavailable:', err?.message || err); }
+        // Football admin sync removed per Media module simplification
         try { setupContentForms(); } catch (err) { console.warn('Content forms unavailable:', err?.message || err); }
         try { setupGovernmentManager(); } catch (err) { console.warn('Government manager unavailable:', err?.message || err); }
         try { initializeAdvertisingModule(); } catch (err) { console.warn('Advertising module unavailable:', err?.message || err); }
@@ -546,8 +546,8 @@ async function loadBusinessPagesModule() {
             business_name: page.business_name || page.username || 'Unnamed business',
             status: page.is_suspended ? 'suspended' : page.verified ? 'verified' : 'pending',
             owner_name: page.username || 'Unknown owner',
-            profile_photo: page.logo_url || page.cover_photo || '../assets/Icon.png',
-            cover_photo: page.cover_photo || '../assets/Logo.png'
+            profile_photo: page.logo_url || page.cover_photo || '../assets/Icon.png?v=2',
+            cover_photo: page.cover_photo || '../assets/Logo.png?v=2'
         }));
 
         businessPagesModuleState.pages = pages;
@@ -1655,7 +1655,7 @@ function renderBusinessPagesTable() {
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <td style="padding: 12px 8px; min-width: 260px;">
                                 <div style="display:flex; gap:10px; align-items:center;">
-                                    <img src="${page.profile_photo || '../assets/Icon.png'}" alt="" style="width:48px; height:48px; border-radius:10px; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
+                                    <img src="${page.profile_photo || '../assets/Icon.png?v=2'}" alt="" style="width:48px; height:48px; border-radius:10px; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
                                     <div>
                                         <strong style="display:block; color: var(--text-primary);">${escapeHtml(page.business_name)}</strong>
                                         <span style="display:block; font-size:11px; color: var(--text-muted); margin-top:2px;">${escapeHtml(page.category || 'General')}</span>
@@ -1777,7 +1777,7 @@ window.viewBusinessPage = async (pageId) => {
             <div style="display:grid; gap:18px;">
                 <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;">
                     <div style="display:flex; gap:12px; align-items:center;">
-                        <img src="${page.profile_photo || '../assets/Icon.png'}" alt="" style="width:72px; height:72px; border-radius:16px; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
+                        <img src="${page.profile_photo || '../assets/Icon.png?v=2'}" alt="" style="width:72px; height:72px; border-radius:16px; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
                         <div>
                             <h3 style="margin:0; color:var(--text-primary);">${escapeHtml(page.business_name)}</h3>
                             <p style="margin:4px 0 0; color:var(--text-muted);">${escapeHtml(page.category || 'General')} &bull; ${escapeHtml(page.district || 'Unknown')}</p>
@@ -1814,7 +1814,7 @@ window.viewBusinessPage = async (pageId) => {
                         <div style="background: rgba(255,255,255,0.03); border-radius: var(--radius-md); padding: 12px;">
                             <strong style="color:var(--text-primary);">Owner Profile</strong>
                             <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center; margin-top:10px;">
-                                <img src="${owner?.profile_photo || '../assets/Icon.png'}" alt="" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
+                                <img src="${owner?.profile_photo || '../assets/Icon.png?v=2'}" alt="" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
                                 <div>
                                     <p style="margin:0; color:var(--text-primary);">${escapeHtml(ownerName)}</p>
                                     <p style="margin:4px 0; color:var(--text-muted);">${escapeHtml(ownerEmail)}</p>
@@ -2262,7 +2262,7 @@ function renderUsersTable() {
 }
 
 function getUserAvatar(user) {
-    return user.profile_photo || '../assets/Icon.png';
+    return user.profile_photo || '../assets/Icon.png?v=2';
 }
 
 function getUserDisplayName(user) {
@@ -4309,7 +4309,7 @@ function renderMarketplaceAdminPanel() {
     }
 
     const renderedCards = visibleListings.map(item => {
-        const primaryImage = item.images && item.images.length ? item.images[0] : '../assets/Icon.png';
+        const primaryImage = item.images && item.images.length ? item.images[0] : '../assets/Icon.png?v=2';
         const sellerName = item.profiles?.full_name || 'Unknown seller';
         const normalizedStatus = String(item.status || 'pending').toLowerCase();
         const actionButtons = normalizedStatus === 'pending'
@@ -4387,7 +4387,7 @@ async function fetchMarketplaceQueue() {
 }
 
 function renderMarketplaceListingModalContent(listing, sellerProfile, businessPage) {
-    const galleryImages = listing.images && listing.images.length ? listing.images : ['../assets/Icon.png'];
+    const galleryImages = listing.images && listing.images.length ? listing.images : ['../assets/Icon.png?v=2'];
     marketplaceAdminState.galleryImages = galleryImages;
     marketplaceAdminState.galleryIndex = 0;
     marketplaceAdminState.galleryZoom = 1;
@@ -4470,7 +4470,7 @@ function renderMarketplaceListingModalContent(listing, sellerProfile, businessPa
 function renderMarketplaceGalleryView() {
     const imageElement = document.getElementById('marketplace-gallery-main-image');
     if (imageElement) {
-        imageElement.src = marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png';
+        imageElement.src = marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png?v=2';
         imageElement.style.transform = `scale(${marketplaceAdminState.galleryZoom})`;
     }
 
@@ -4481,7 +4481,7 @@ function renderMarketplaceGalleryView() {
 
     const lightboxImage = document.getElementById('marketplace-gallery-lightbox-image');
     if (lightboxImage) {
-        lightboxImage.src = marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png';
+        lightboxImage.src = marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png?v=2';
         lightboxImage.style.transform = `scale(${marketplaceAdminState.galleryZoom})`;
     }
 }
@@ -4512,7 +4512,7 @@ window.openMarketplaceGalleryLightbox = () => {
                 <strong style="color:var(--text-primary);">Image Preview</strong>
                 <button class="btn-secondary" type="button" onclick="window.closeMarketplaceGalleryLightbox()">Close</button>
             </div>
-            <img id="marketplace-gallery-lightbox-image" src="${marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png'}" alt="" style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:12px; background:#000; transform:scale(${marketplaceAdminState.galleryZoom}); transition:transform 0.2s ease;">
+            <img id="marketplace-gallery-lightbox-image" src="${marketplaceAdminState.galleryImages[marketplaceAdminState.galleryIndex] || '../assets/Icon.png?v=2'}" alt="" style="max-width:100%; max-height:70vh; object-fit:contain; border-radius:12px; background:#000; transform:scale(${marketplaceAdminState.galleryZoom}); transition:transform 0.2s ease;">
             <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center;">
                 <button class="btn-secondary" type="button" onclick="window.marketplaceGalleryNavigate(-1)">Previous</button>
                 <button class="btn-secondary" type="button" onclick="window.marketplaceGalleryNavigate(1)">Next</button>
@@ -4591,7 +4591,7 @@ window.viewMarketplaceSeller = async (sellerId) => {
         body.innerHTML = `
             <div style="display:grid; gap:16px;">
                 <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
-                    <img src="${profile.profile_photo || '../assets/Icon.png'}" alt="" style="width:92px; height:92px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
+                    <img src="${profile.profile_photo || '../assets/Icon.png?v=2'}" alt="" style="width:92px; height:92px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.12);">
                     <div style="flex:1; min-width:220px;">
                         <h3 style="margin:0 0 8px; color:var(--text-primary);">${escapeHtml(profile.full_name || 'Unnamed seller')}</h3>
                         <p style="margin:4px 0; color:var(--text-muted);">Email: ${escapeHtml(profile.email || '—')}</p>

@@ -116,7 +116,7 @@ function renderDirectoryGrid(businesses) {
     }
 
     grid.innerHTML = businesses.map(item => {
-        const primaryLogo = item.logo_url || '../assets/Icon.png';
+        const primaryLogo = item.logo_url || '../assets/Icon.png?v=2';
         const verifyBadge = item.verified
             ? `<span class="badge badge-verified" style="font-size: 9px; padding: 2px 6px;">VERIFIED PAGE</span>`
             : `<span class="badge badge-secondary" style="font-size: 9px; padding: 2px 6px; border-color: rgba(255,255,255,0.1); color: var(--text-muted);">STANDARD PAGE</span>`;
@@ -344,8 +344,8 @@ window.viewBusinessProfile = async (businessId) => {
 
     container.innerHTML = `
         <div style="position:relative; aspect-ratio:21/9; border-radius:var(--radius-lg); overflow:hidden; background:#000; margin-bottom:24px;">
-            <img src="${business.cover_photo || business.cover_url || '../assets/Logo.png'}" alt="" style="width:100%; height:100%; object-fit:cover; opacity:0.65;">
-            <img src="${business.logo_url || '../assets/Icon.png'}" alt="" style="position:absolute; bottom:20px; left:20px; width:70px; height:70px; border-radius:var(--radius-md); border:var(--glass-border); object-fit:cover;">
+            <img src="${business.cover_photo || business.cover_url || '../assets/Logo.png?v=2'}" alt="" style="width:100%; height:100%; object-fit:cover; opacity:0.65;">
+            <img src="${business.logo_url || '../assets/Icon.png?v=2'}" alt="" style="position:absolute; bottom:20px; left:20px; width:70px; height:70px; border-radius:var(--radius-md); border:var(--glass-border); object-fit:cover;">
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px; margin-bottom:32px;">

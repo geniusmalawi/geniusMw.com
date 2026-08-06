@@ -14,13 +14,6 @@ let activeCategory = 'live-tv';
 let playlistQueue = [];
 let currentTrackIndex = 0;
 let isPlayingState = false;
-let footballMatches = [];
-let footballRealtimeChannel = null;
-const DEFAULT_FOOTBALL_STREAM = 'https://www.youtube.com/embed/live_stream?channel=UC2PCH5V-HlP_fUisO_y056A';
-
-const FALLBACK_FOOTBALL = [
-    { id: 'f1', title: 'Malawi Super League Spotlight', home_team: 'Mighty Tigers', away_team: 'Big Bullets', competition: 'Super League', kickoff_at: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), stream_url: 'https://www.youtube.com/embed/live_stream?channel=UC2PCH5V-HlP_fUisO_y056A', match_summary: 'Live matchday updates, highlights, and fan discussion in one place.' }
-];
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Dismiss Splash Screen
@@ -32,8 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 2. Bind Event Handlers
     setupTabSwitching();
     setupContinuousAudioPlayer();
-    try { setupFootballRealtime(); } catch (err) { console.warn('Football live sync unavailable:', err?.message || err); }
-    await loadFootballMatches();
+    
 });
 
 // ==========================================
@@ -56,8 +48,7 @@ function setupTabSwitching() {
         'tab-live-tv': 'live-tv',
         'tab-live-radio': 'live-radio',
         'tab-videos': 'videos',
-        'tab-music': 'music',
-        'tab-football': 'football'
+        'tab-music': 'music'
     };
 
     Object.keys(tabs).forEach(tabId => {
@@ -116,11 +107,6 @@ async function loadMediaTier(category) {
             title.textContent = 'Music Streaming Services';
             badge.textContent = 'Premium Sound';
             await loadMusic();
-        } else if (category === 'football') {
-            title.textContent = 'Football Live & Highlights';
-            badge.textContent = 'Matchday Central';
-
-            renderFootballGrid(footballMatches);
         }
     } catch (err) {
         console.error('Failed to load media tier details:', err.message);

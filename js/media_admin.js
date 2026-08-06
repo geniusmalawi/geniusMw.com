@@ -165,6 +165,16 @@ function escapeHtml(str) {
     return String(str || '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+function isValidHttpUrl(input) {
+    try {
+        if (!input) return false;
+        const u = new URL(input.trim());
+        return u.protocol === 'http:' || u.protocol === 'https:';
+    } catch (err) {
+        return false;
+    }
+}
+
 function enableDragReorder() {
     const container = document.getElementById('media-list-container');
     let dragEl = null;
@@ -194,14 +204,265 @@ async function saveReorder() {
 }
 
 function openAddModal() {
-    openMediaModal({ mode: 'add' });
+    openUnifiedMediaModal({ mode: 'add' });
 }
 
 async function openEditModal(id) {
     const table = MEDIA_TAB_MAP[currentMediaTab].table;
     const { data, error } = await supabase.from(table).select('*').eq('id', id).single();
     if (error || !data) return alert('Unable to load item for edit.');
-    openMediaModal({ mode: 'edit', item: data });
+    openUnifiedMediaModal({ mode: 'edit', item: data, originalTable: table });
+}
+
+// --- Unified Media Modal (single intelligent upload form) ---
+function openUnifiedMediaModal({ mode = 'add', item = {}, originalTable = null } = {}) {
+    const isEdit = mode === 'edit';
+    // create modal wrapper
+    let modal = document.getElementById('media-unified-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'media-unified-modal';
+        modal.style.cssText = 'position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 10000;';
+        modal.innerHTML = `
+            <div id="media-unified-modal-body" style="width: min(980px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 id="media-unified-modal-title">${isEdit ? 'Edit' : 'Add New'} Media</h3>
+                    <button id="media-unified-modal-close" class="btn-secondary">Close</button>
+                </div>
+                <div style="display:grid; gap:12px;">
+                    <label style="font-size:13px; color:var(--text-muted);">Choose Media Type</label>
+                    <select id="media-type-selector" class="form-control">
+                        <option value="tv">Live TV</option>
+                        <option value="radio">Live Radio</option>
+                        <option value="videos">Original Videos</option>
+                        <option value="music">Music Streaming</option>
+                    </select>
+                    <div id="media-unified-fields"></div>
+                    <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:6px;">
+                        <button id="media-unified-cancel" class="btn-secondary">Cancel</button>
+                        <button id="media-unified-save" class="btn-primary">${isEdit ? 'Update' : 'Create'}</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const body = document.getElementById('media-unified-modal-body');
+    const selector = document.getElementById('media-type-selector');
+    const fieldsContainer = document.getElementById('media-unified-fields');
+    document.getElementById('media-unified-modal-title').textContent = `${isEdit ? 'Edit' : 'Add New'} Media`;
+
+    // set selector to current type (try to infer from originalTable or item)
+    let initialType = 'tv';
+    if (originalTable) {
+        initialType = Object.keys(MEDIA_TAB_MAP).find(k => MEDIA_TAB_MAP[k].table === originalTable) || 'tv';
+    } else if (item && (item.title || item.artist || item.name)) {
+        // best-effort: if item has 'title' or 'artist' -> videos/music
+        if (item.video_url || item.youtube_url || item.vimeo_url || item.title) initialType = 'videos';
+        if (item.audio_url || item.streaming_url || item.artist) initialType = 'music';
+        if (item.stream_url && item.logo_url && item.country) initialType = 'tv';
+    }
+    selector.value = initialType;
+
+    // render fields for initial type
+    fieldsContainer.innerHTML = buildFieldsForType(initialType, isEdit, item);
+
+    // handle type change
+    selector.onchange = (e) => {
+        fieldsContainer.innerHTML = buildFieldsForType(e.target.value, isEdit, item);
+    };
+
+    // wire buttons
+    document.getElementById('media-unified-modal-close').onclick = () => modal.style.display = 'none';
+    document.getElementById('media-unified-cancel').onclick = () => modal.style.display = 'none';
+    document.getElementById('media-unified-save').onclick = async () => {
+        await handleSaveUnifiedMedia({ mode: isEdit ? 'edit' : 'add', originalTable, item });
+    };
+
+    // show modal
+    modal.style.display = 'flex';
+}
+
+function buildFieldsForType(type, isEdit, item) {
+    const v = (k) => escapeHtml(item[k] || '');
+    if (type === 'tv') {
+        return `
+            <input id="media-name" class="form-control" placeholder="Channel Name" value="${v('name')}">
+            <input id="media-country" class="form-control" placeholder="Country" value="${v('country')}">
+            <input id="media-category" class="form-control" placeholder="Category" value="${v('category')}">
+            <input id="media-logo" type="file" class="form-control">
+            <input id="media-stream-url" class="form-control" placeholder="Stream URL" value="${v('stream_url')}">
+            <textarea id="media-description" class="form-control" rows="4" placeholder="Description">${v('description')}</textarea>
+            <div style="display:flex; gap:8px; align-items:center;"><select id="media-status" class="form-control"><option value="online">Online</option><option value="offline">Offline</option></select><label style="display:flex; align-items:center; gap:6px;"><input id="media-featured" type="checkbox" ${item.featured ? 'checked' : ''}> Featured</label></div>
+        `;
+    }
+    if (type === 'radio') {
+        return `
+            <input id="media-name" class="form-control" placeholder="Radio Name" value="${v('name')}">
+            <input id="media-country" class="form-control" placeholder="Country" value="${v('country')}">
+            <input id="media-logo" type="file" class="form-control">
+            <input id="media-stream-url" class="form-control" placeholder="Streaming URL" value="${v('stream_url')}">
+            <input id="media-genre" class="form-control" placeholder="Genre" value="${v('genre')}">
+            <textarea id="media-description" class="form-control" rows="3" placeholder="Description">${v('description')}</textarea>
+            <div style="display:flex; gap:8px; align-items:center;"><label style="display:flex; align-items:center; gap:6px;"><input id="media-featured" type="checkbox" ${item.featured ? 'checked' : ''}> Featured</label></div>
+        `;
+    }
+    if (type === 'videos') {
+        return `
+            <input id="media-title" class="form-control" placeholder="Video Title" value="${v('title')}">
+            <input id="media-thumbnail" type="file" class="form-control">
+            <input id="media-video-file" type="file" class="form-control">
+            <input id="media-video-url" class="form-control" placeholder="Video URL (YouTube/Vimeo/MP4)" value="${v('video_url') || v('youtube_url') || v('vimeo_url')}">
+            <input id="media-category" class="form-control" placeholder="Category" value="${v('category')}">
+            <input id="media-duration" class="form-control" placeholder="Duration (e.g. 02:30)" value="${v('duration')}">
+            <textarea id="media-description" class="form-control" rows="4" placeholder="Description">${v('description')}</textarea>
+            <div style="display:flex; gap:8px; align-items:center;"><label style="display:flex; align-items:center; gap:6px;"><input id="media-featured" type="checkbox" ${item.featured ? 'checked' : ''}> Featured</label></div>
+        `;
+    }
+    // music
+    return `
+        <input id="media-title" class="form-control" placeholder="Song Title" value="${v('title')}">
+        <input id="media-artist" class="form-control" placeholder="Artist" value="${v('artist')}">
+        <input id="media-album" class="form-control" placeholder="Album" value="${v('album')}">
+        <input id="media-cover" type="file" class="form-control">
+        <input id="media-audio-file" type="file" class="form-control">
+        <input id="media-audio-url" class="form-control" placeholder="Audio URL" value="${v('audio_url') || v('streaming_url')}">
+        <input id="media-genre" class="form-control" placeholder="Genre" value="${v('genre')}">
+        <input id="media-duration" class="form-control" placeholder="Duration (e.g. 03:24)" value="${v('duration')}">
+        <textarea id="media-description" class="form-control" rows="3" placeholder="Description">${v('description')}</textarea>
+        <div style="display:flex; gap:8px; align-items:center;"><label style="display:flex; align-items:center; gap:6px;"><input id="media-featured" type="checkbox" ${item.featured ? 'checked' : ''}> Featured</label></div>
+    `;
+}
+
+async function handleSaveUnifiedMedia({ mode = 'add', originalTable = null, item = {} } = {}) {
+    const selectedType = document.getElementById('media-type-selector').value;
+    const table = MEDIA_TAB_MAP[selectedType].table;
+    try {
+        // Build payload depending on type
+        let payload = {};
+        if (selectedType === 'tv') {
+            const name = document.getElementById('media-name').value.trim();
+            const country = document.getElementById('media-country').value.trim();
+            const category = document.getElementById('media-category').value.trim();
+            const stream_url = document.getElementById('media-stream-url').value.trim();
+            const description = document.getElementById('media-description').value.trim();
+            const status = document.getElementById('media-status') ? document.getElementById('media-status').value : 'online';
+            const featured = document.getElementById('media-featured')?.checked || false;
+            if (!name) return alert('Channel Name is required.');
+            if (!stream_url || !isValidHttpUrl(stream_url)) return alert('Valid Stream URL is required.');
+            // duplicate check
+            if (mode !== 'edit') {
+                const { data: dup } = await supabase.from(table).select('id').eq('stream_url', stream_url).maybeSingle();
+                if (dup) return alert('A channel with this stream URL already exists.');
+            }
+            payload = { name, country, category, stream_url, description, status, featured };
+            const fileInput = document.getElementById('media-logo');
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const res = await storageAPI.uploadFile(fileInput.files[0], 'media', 'live-tv');
+                payload.logo_url = res.publicUrl; payload.logo_path = res.path; payload.logo_bucket = res.bucket;
+            }
+        } else if (selectedType === 'radio') {
+            const name = document.getElementById('media-name').value.trim();
+            const country = document.getElementById('media-country').value.trim();
+            const stream_url = document.getElementById('media-stream-url').value.trim();
+            const genre = document.getElementById('media-genre').value.trim();
+            const description = document.getElementById('media-description').value.trim();
+            const featured = document.getElementById('media-featured')?.checked || false;
+            if (!name) return alert('Radio Name is required.');
+            if (!stream_url || !isValidHttpUrl(stream_url)) return alert('Valid Streaming URL is required.');
+            if (mode !== 'edit') {
+                const { data: dup } = await supabase.from(table).select('id').eq('stream_url', stream_url).maybeSingle();
+                if (dup) return alert('A radio station with this stream URL already exists.');
+            }
+            payload = { name, country, stream_url, genre, description, featured };
+            const fileInput = document.getElementById('media-logo');
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const res = await storageAPI.uploadFile(fileInput.files[0], 'media', 'radio');
+                payload.logo_url = res.publicUrl; payload.logo_path = res.path; payload.logo_bucket = res.bucket;
+            }
+        } else if (selectedType === 'videos') {
+            const title = document.getElementById('media-title').value.trim();
+            const category = document.getElementById('media-category').value.trim();
+            const duration = document.getElementById('media-duration').value.trim();
+            const description = document.getElementById('media-description').value.trim();
+            const featured = document.getElementById('media-featured')?.checked || false;
+            const videoUrl = document.getElementById('media-video-url').value.trim();
+            const thumbInput = document.getElementById('media-thumbnail');
+            const vidInput = document.getElementById('media-video-file');
+            if (!title) return alert('Video Title is required.');
+            if (!vidInput?.files?.[0] && !videoUrl) return alert('Provide a video file or URL.');
+            if (videoUrl && !isValidHttpUrl(videoUrl)) return alert('Invalid video URL.');
+            payload = { title, category, duration, description, featured, status: 'published' };
+            if (thumbInput && thumbInput.files && thumbInput.files[0]) {
+                const res = await storageAPI.uploadFile(thumbInput.files[0], 'media', 'videos');
+                payload.thumbnail_url = res.publicUrl; payload.thumbnail_path = res.path; payload.thumbnail_bucket = res.bucket;
+            }
+            if (vidInput && vidInput.files && vidInput.files[0]) {
+                const res = await storageAPI.uploadFile(vidInput.files[0], 'media', 'videos');
+                payload.video_url = res.publicUrl; payload.video_path = res.path; payload.video_bucket = res.bucket;
+            } else if (videoUrl) {
+                // try to classify youtube/vimeo
+                payload.video_url = videoUrl;
+                if (videoUrl.includes('youtube.com') || videoUrl.includes('youtu.be')) payload.youtube_url = videoUrl;
+                if (videoUrl.includes('vimeo.com')) payload.vimeo_url = videoUrl;
+            }
+        } else {
+            // music
+            const title = document.getElementById('media-title').value.trim();
+            const artist = document.getElementById('media-artist').value.trim();
+            const album = document.getElementById('media-album').value.trim();
+            const genre = document.getElementById('media-genre').value.trim();
+            const duration = document.getElementById('media-duration').value.trim();
+            const description = document.getElementById('media-description').value.trim();
+            const featured = document.getElementById('media-featured')?.checked || false;
+            const audioUrl = document.getElementById('media-audio-url').value.trim();
+            const coverInput = document.getElementById('media-cover');
+            const audioInput = document.getElementById('media-audio-file');
+            if (!title || !artist) return alert('Song Title and Artist are required.');
+            if (!audioInput?.files?.[0] && !audioUrl) return alert('Provide an audio file or URL.');
+            if (audioUrl && !isValidHttpUrl(audioUrl)) return alert('Invalid audio URL.');
+            // duplicate checks
+            if (mode !== 'edit') {
+                if (audioUrl) {
+                    const { data: dup } = await supabase.from(table).select('id').eq('streaming_url', audioUrl).maybeSingle();
+                    if (dup) return alert('A track with this streaming URL already exists.');
+                } else {
+                    const { data: dup } = await supabase.from(table).select('id').eq('title', title).eq('artist', artist).maybeSingle();
+                    if (dup) return alert('A track with this title and artist already exists.');
+                }
+            }
+            payload = { title, artist, album, genre, duration, description, featured, status: 'published' };
+            if (coverInput && coverInput.files && coverInput.files[0]) {
+                const res = await storageAPI.uploadFile(coverInput.files[0], 'media', 'music');
+                payload.cover_url = res.publicUrl; payload.cover_path = res.path; payload.cover_bucket = res.bucket;
+            }
+            if (audioInput && audioInput.files && audioInput.files[0]) {
+                const res = await storageAPI.uploadFile(audioInput.files[0], 'media', 'music');
+                payload.audio_url = res.publicUrl; payload.audio_path = res.path; payload.audio_bucket = res.bucket;
+            } else if (audioUrl) {
+                payload.streaming_url = audioUrl;
+            }
+        }
+
+        // If editing and media type changed, move record between tables
+        if (mode === 'edit' && originalTable && originalTable !== table) {
+            // insert into new table, then delete from original
+            await supabase.from(table).insert(payload);
+            await supabase.from(originalTable).delete().eq('id', item.id);
+        } else if (mode === 'edit') {
+            // update existing
+            await supabase.from(table).update(payload).eq('id', item.id);
+        } else {
+            await supabase.from(table).insert(payload);
+        }
+
+        document.getElementById('media-unified-modal').style.display = 'none';
+        await loadCurrentTab();
+    } catch (err) {
+        console.error('Save unified media failed', err);
+        alert('Unable to save media. See console for details.');
+    }
 }
 
 function openMediaModal({ mode = 'add', item = {} } = {}) {
@@ -347,6 +608,15 @@ async function saveMediaForm(tab, mode, id) {
             const status = document.getElementById('media-status').value;
             const featured = document.getElementById('media-featured').checked;
 
+            // Validation: require a valid stream URL
+            if (!stream_url || !isValidHttpUrl(stream_url)) return alert('Please provide a valid Stream URL (http/https).');
+
+            // Duplicate prevention: by stream_url
+            if (mode !== 'edit') {
+                const { data: dupByUrl } = await supabase.from('media_live_tv').select('id').eq('stream_url', stream_url).maybeSingle();
+                if (dupByUrl) return alert('A Live TV channel with this stream URL already exists.');
+            }
+
             payload = { name, category, stream_url, country, description, status, featured };
 
             const fileInput = document.getElementById('media-logo');
@@ -364,6 +634,14 @@ async function saveMediaForm(tab, mode, id) {
             const description = document.getElementById('media-description').value.trim();
             const status = document.getElementById('media-status').value;
             const featured = document.getElementById('media-featured').checked;
+            // Validation: require a valid stream URL
+            if (!stream_url || !isValidHttpUrl(stream_url)) return alert('Please provide a valid Radio Stream URL (http/https).');
+
+            if (mode !== 'edit') {
+                const { data: dupByUrl } = await supabase.from('media_radio').select('id').eq('stream_url', stream_url).maybeSingle();
+                if (dupByUrl) return alert('A Live Radio station with this stream URL already exists.');
+            }
+
             payload = { name, stream_url, genre, country, description, status, featured };
             const fileInput = document.getElementById('media-logo');
             if (fileInput && fileInput.files && fileInput.files[0]) {
@@ -376,6 +654,7 @@ async function saveMediaForm(tab, mode, id) {
             const title = document.getElementById('media-title').value.trim();
             const category = document.getElementById('media-category').value.trim();
             const duration = document.getElementById('media-duration').value.trim();
+            const vidInput = document.getElementById('media-video-file');
             const description = document.getElementById('media-description').value.trim();
             const publish_date = document.getElementById('media-publish-date').value || null;
             const featured = document.getElementById('media-featured').checked;
@@ -400,6 +679,14 @@ async function saveMediaForm(tab, mode, id) {
 
             const yt = document.getElementById('media-youtube').value.trim();
             const vimeo = document.getElementById('media-vimeo').value.trim();
+
+            // Require at least one playable source (uploaded file or external URL)
+            const hasUploadedVideo = vidInput && vidInput.files && vidInput.files[0];
+            if (!hasUploadedVideo && !yt && !vimeo) return alert('Please provide a video file or a YouTube/Vimeo URL.');
+
+            if (yt && !isValidHttpUrl(yt)) return alert('Please provide a valid YouTube URL.');
+            if (vimeo && !isValidHttpUrl(vimeo)) return alert('Please provide a valid Vimeo URL.');
+
             if (yt) payload.youtube_url = yt;
             if (vimeo) payload.vimeo_url = vimeo;
         } else {
@@ -412,6 +699,23 @@ async function saveMediaForm(tab, mode, id) {
             const duration = document.getElementById('media-duration').value.trim();
             const description = document.getElementById('media-description').value.trim();
             const featured = document.getElementById('media-featured').checked;
+
+            // Require audio file or streaming URL
+            const audioInput = document.getElementById('media-audio-file');
+            const hasUploadedAudio = audioInput && audioInput.files && audioInput.files[0];
+            if (!hasUploadedAudio && !streaming_url) return alert('Please provide an audio file or a streaming URL.');
+            if (streaming_url && !isValidHttpUrl(streaming_url)) return alert('Please provide a valid streaming URL (http/https).');
+
+            // Duplicate prevention: check by title+artist or streaming_url
+            if (mode !== 'edit') {
+                if (streaming_url) {
+                    const { data: dup } = await supabase.from('media_music').select('id').eq('streaming_url', streaming_url).maybeSingle();
+                    if (dup) return alert('A music track with this streaming URL already exists.');
+                } else if (title && artist) {
+                    const { data: dup } = await supabase.from('media_music').select('id').eq('title', title).eq('artist', artist).maybeSingle();
+                    if (dup) return alert('A music track with this title and artist already exists.');
+                }
+            }
 
             payload = { title, artist, album, streaming_url, genre, duration, description, featured, status: 'published' };
 

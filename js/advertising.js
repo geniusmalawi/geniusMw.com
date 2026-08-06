@@ -18,7 +18,7 @@ const DISPLAY_LOCATIONS = [
     { value: 'news', label: 'News' },
     { value: 'books', label: 'Books' },
     { value: 'jobs', label: 'Jobs' },
-    { value: 'football', label: 'Football Live' },
+    // Football display location removed — only keep core sections
     { value: 'government', label: 'Government Services' },
     { value: 'media', label: 'Media & Entertainment' },
     { value: 'entire-website', label: 'Entire Website' }
@@ -268,7 +268,7 @@ function renderImageAd(ad) {
     wrapper.className = 'luxury-card';
     wrapper.style.cssText = 'margin:24px 0; padding:0; overflow:hidden;';
     wrapper.innerHTML = `
-        <img src="${ad.image_url || '../assets/Icon.png'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:320px; object-fit:cover;">
+        <img src="${ad.image_url || '../assets/Icon.png?v=2'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:320px; object-fit:cover;">
         <div style="padding:20px;">
             <h3 style="margin:0 0 8px; color:var(--text-primary);">${escapeHtml(ad.title)}</h3>
             <p style="margin:0 0 12px; color:var(--text-secondary);">${escapeHtml(ad.description || ad.advertiser_name)}</p>
@@ -308,7 +308,7 @@ function renderPopupAd(ad) {
             <button type="button" style="position:absolute; top:12px; right:12px; border:none; background:none; color:var(--text-muted); cursor:pointer;" data-close-popup>✕</button>
             <h3 style="margin:0 0 8px; color:var(--text-primary);">${escapeHtml(ad.title)}</h3>
             <p style="margin:0 0 12px; color:var(--text-secondary);">${escapeHtml(ad.description || ad.advertiser_name)}</p>
-            <img src="${ad.image_url || '../assets/Icon.png'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:220px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:12px;">
+            <img src="${ad.image_url || '../assets/Icon.png?v=2'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:220px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:12px;">
             <a href="${ad.destination_url || '#'}" class="btn-primary" style="width:100%; text-align:center;" data-ad-link="${ad.id}">${escapeHtml(ad.button_text || 'Learn More')}</a>
         </div>
     `;
@@ -326,7 +326,7 @@ function renderCarouselAd(ad) {
     const wrapper = document.createElement('div');
     wrapper.className = 'luxury-card';
     wrapper.style.cssText = 'margin:24px 0; padding:20px;';
-    const images = Array.isArray(ad.carousel_images) && ad.carousel_images.length ? ad.carousel_images : [ad.image_url || '../assets/Icon.png'];
+    const images = Array.isArray(ad.carousel_images) && ad.carousel_images.length ? ad.carousel_images : [ad.image_url || '../assets/Icon.png?v=2'];
     let currentIndex = 0;
     const image = document.createElement('img');
     image.src = images[0];
@@ -358,7 +358,7 @@ function renderSidebarAd(ad) {
     wrapper.innerHTML = `
         <h3 style="margin:0 0 8px; color:var(--text-primary);">${escapeHtml(ad.title)}</h3>
         <p style="margin:0 0 12px; color:var(--text-secondary);">${escapeHtml(ad.description || ad.advertiser_name)}</p>
-        <img src="${ad.image_url || '../assets/Icon.png'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:180px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:12px;">
+        <img src="${ad.image_url || '../assets/Icon.png?v=2'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:180px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:12px;">
         <a href="${ad.destination_url || '#'}" class="btn-secondary" style="width:100%; text-align:center;" data-ad-link="${ad.id}">${escapeHtml(ad.button_text || 'Learn More')}</a>
     `;
     document.body.appendChild(wrapper);
@@ -393,7 +393,7 @@ function renderFullScreenAd(ad) {
             <button type="button" style="position:absolute; top:12px; right:12px; border:none; background:none; color:var(--text-muted); cursor:pointer;" data-close-full-screen>✕</button>
             <h2 style="margin:0 0 8px; color:var(--text-primary);">${escapeHtml(ad.title)}</h2>
             <p style="margin:0 0 16px; color:var(--text-secondary);">${escapeHtml(ad.description || ad.advertiser_name)}</p>
-            <img src="${ad.image_url || '../assets/Icon.png'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:320px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:16px;">
+            <img src="${ad.image_url || '../assets/Icon.png?v=2'}" alt="${escapeHtml(ad.title)}" style="width:100%; max-height:320px; object-fit:cover; border-radius:var(--radius-md); margin-bottom:16px;">
             <a href="${ad.destination_url || '#'}" class="btn-primary" style="width:100%; text-align:center;" data-ad-link="${ad.id}">${escapeHtml(ad.button_text || 'Explore Now')}</a>
         </div>
     `;
