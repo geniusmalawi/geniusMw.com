@@ -317,7 +317,7 @@ function setupAccountDeactivation() {
 
             // Trigger remote session termination and exit to home page
             await authAPI.signOut();
-            window.location.href = '../index.html';
+            window.location.replace('/');
 
         } catch (err) {
             displayAlert(err.message || 'An error occurred during account deactivation.');

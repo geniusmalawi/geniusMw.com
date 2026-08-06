@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Session Pre-Check: Redirect active sessions to dashboard
     const session = await supabase.auth.getSession();
     if (session?.data?.session) {
-        window.location.href = '../index.html';
+        window.location.replace('/');
         return;
     }
 

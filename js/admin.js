@@ -9,7 +9,7 @@
 
 import { supabase, storageAPI, validateFile } from './supabase.js';
 import { createAdvertisement, updateAdvertisement, deleteAdvertisement, archiveAdvertisement, restoreAdvertisement, toggleAdvertisementActive, duplicateAdvertisement, getAdvertisementById, getAdvertisements, getAdvertisementTypes, getDisplayLocations, getAudienceOptions } from './advertising.js';
-import './media_admin.js';
+import './media_admin.js?v=2.0.2';
 
 let currentAdminId = null;
 let currentAdminRole = 'user';
@@ -2615,9 +2615,9 @@ function initializeAdminSectionActions() {
         }
 
         if (label === 'new ad') {
-            button.addEventListener('click', () => {
-                window.open('../index.html', '_blank', 'noopener,noreferrer');
-            });
+                button.addEventListener('click', () => {
+                    window.open('/', '_blank', 'noopener,noreferrer');
+                });
             return;
         }
 

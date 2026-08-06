@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Session Pre-Check: Prevent authenticated users from visiting login
     const session = await supabase.auth.getSession();
     if (session?.data?.session) {
-        window.location.href = '../index.html';
+        window.location.replace('/');
         return;
     }
 
@@ -128,7 +128,7 @@ function setupEmailForm() {
             
             displayAlert('Authentication successful. Routing to Super Dashboard...', 'success');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                window.location.replace('/');
             }, 1000);
         } catch (error) {
             displayAlert(error.message || 'An error occurred during secure sign-in. Please check credentials.');
@@ -198,7 +198,7 @@ function setupPhoneOTPFlow() {
 
             displayAlert('Profile key verified. Access granted.', 'success');
             setTimeout(() => {
-                window.location.href = '../index.html';
+                window.location.replace('/');
             }, 1000);
         } catch (error) {
             displayAlert(error.message || 'Verification failed. The code provided may be invalid or expired.');

@@ -1,12 +1,12 @@
-const CACHE_NAME = 'genius-malawi-cache-v2';
+const CACHE_NAME = 'geniusmw-v2.0.2';
 const CACHE_ASSETS = [
     '/',
     '/index.html',
     '/manifest.json',
-    '/css/style.css',
-    '/js/app.js',
-    '/js/advertising.js',
-    '/js/pwa-install.js',
+    '/css/style.css?v=2.0.2',
+    '/js/app.js?v=2.0.2',
+    '/js/advertising.js?v=2.0.2',
+    '/js/pwa-install.js?v=2.0.2',
     '/assets/Icon.png?v=2',
     '/assets/Logo.png?v=2'
 ];
