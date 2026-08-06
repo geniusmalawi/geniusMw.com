@@ -63,6 +63,22 @@ html[data-accessibility="high-contrast"] {
     --glass-border: 2px solid #ffffff;
 }
 
+/* Responsive foundation and device-aware layout tokens */
+html {
+    color-scheme: dark;
+    font-size: clamp(15px, 0.95vw + 0.7rem, 18px);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+    background-color: var(--bg-deep);
+}
+html[data-device="mobile"] {
+    font-size: clamp(15px, 1.2vw + 0.7rem, 17px);
+}
+html[data-device="foldable"] {
+    font-size: clamp(15px, 0.9vw + 0.7rem, 17px);
+}
+
 /* Accessibility: Fluid Font Sizing Overrides */
 html[data-font-size="large"] {
     font-size: 115%;
@@ -86,10 +102,19 @@ body {
     font-family: var(--font-body);
     font-size: 16px;
     line-height: 1.6;
+    min-width: 0;
+    min-height: 100%;
+    width: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     padding-bottom: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: none;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .msofi-workspace-shell {
@@ -247,6 +272,28 @@ img, video {
     display: block;
 }
 
+input, textarea, select, button {
+    font: inherit;
+    max-width: 100%;
+}
+
+button, a {
+    touch-action: manipulation;
+}
+
+table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-collapse: collapse;
+}
+
+th, td {
+    white-space: normal;
+    word-break: break-word;
+}
+
 /* ==========================================
    3. ANIMATIONS & KEYFRAMES
    ========================================== */
@@ -294,26 +341,113 @@ img, video {
    4. LAYOUT COMPONENTS & GLOBAL CONTAINERS
    ========================================== */
 .container {
-    width: 100%;
+    width: min(100%, 1400px);
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 clamp(16px, 2.5vw, 32px);
 }
 
 .grid {
     display: grid;
-    gap: 24px;
+    gap: clamp(16px, 1.8vw, 24px);
 }
-.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-cols-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
 
-@media (max-width: 1024px) {
-    .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 1100px) {
+    .grid-cols-3,
+    .grid-cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 768px) {
     .grid { grid-template-columns: 1fr !important; }
-    .container { padding: 0 16px; }
+    .grid-cols-2,
+    .grid-cols-3,
+    .grid-cols-4 { grid-template-columns: 1fr !important; }
+    .container { padding: 0 clamp(12px, 3vw, 16px); }
+}
+@media (max-width: 480px) {
+    .container { padding: 0 12px; }
+}
+
+/* Responsive header and footer layout */
+header.luxury-card > .container,
+footer .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(12px, 2vw, 20px);
+}
+
+header.luxury-card > .container > a:first-child {
+    flex: 0 0 auto;
+    max-width: 100%;
+}
+
+header.luxury-card > .container > nav,
+header.luxury-card > .container > div:last-child {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 16px);
+    flex-wrap: wrap;
+}
+
+header.luxury-card > .container > nav {
+    gap: clamp(12px, 2vw, 24px);
+}
+
+@media (max-width: 1024px) {
+    header.luxury-card > .container {
+        justify-content: center;
+    }
+
+    header.luxury-card > .container > nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+
+    header.luxury-card > .container > div:last-child {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    header.luxury-card {
+        padding: 16px 14px !important;
+    }
+
+    header.luxury-card > .container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    header.luxury-card > .container > a:first-child {
+        display: flex;
+        justify-content: center;
+    }
+
+    header.luxury-card > .container > nav {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    header.luxury-card > .container > div:last-child {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 720px) {
+    .splash-screen {
+        padding: 10px;
+    }
+
+    .splash-screen > .luxury-card {
+        max-height: calc(100dvh - 20px);
+    }
 }
 
 /* ==========================================
@@ -473,10 +607,10 @@ img, video {
     color: #000000;
     font-weight: 700;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: clamp(13px, 1.8vw, 15px);
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 14px 28px;
+    padding: clamp(10px, 2.3vw, 14px) clamp(16px, 3vw, 28px);
     cursor: pointer;
     transition: var(--transition-smooth);
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
@@ -503,10 +637,10 @@ img, video {
     color: var(--gold-light);
     font-weight: 600;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: clamp(13px, 1.8vw, 15px);
     text-transform: uppercase;
     letter-spacing: 1px;
-    padding: 14px 28px;
+    padding: clamp(10px, 2.3vw, 14px) clamp(16px, 3vw, 28px);
     cursor: pointer;
     transition: var(--transition-smooth);
 }
@@ -2667,5 +2801,10 @@ input, textarea, select, button {
     .luxury-card[style*="padding: 40px 32px;"] ,
     .luxury-card[style*="padding: 40px 24px;"] {
         padding: 22px !important;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
     }
 }
