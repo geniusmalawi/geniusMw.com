@@ -1559,8 +1559,65 @@ function setupTopbarControls() {
         }
     });
 
+    const sidebarToggleBtn = document.getElementById('msofi-sidebar-toggle-btn');
+    const sidebarBackdrop = document.getElementById('msofi-sidebar-backdrop');
+    const sidebarPanel = document.querySelector('.msofi-sidebar-panel');
+
+    const closeSidebar = () => {
+        if (sidebarPanel) sidebarPanel.classList.remove('mobile-open');
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.remove('visible');
+            sidebarBackdrop.hidden = true;
+        }
+        if (sidebarToggleBtn) sidebarToggleBtn.setAttribute('aria-expanded', 'false');
+    };
+
+    const openSidebar = () => {
+        if (sidebarPanel) sidebarPanel.classList.add('mobile-open');
+        if (sidebarBackdrop) {
+            sidebarBackdrop.classList.add('visible');
+            sidebarBackdrop.hidden = false;
+        }
+        if (sidebarToggleBtn) sidebarToggleBtn.setAttribute('aria-expanded', 'true');
+    };
+
+    sidebarToggleBtn?.addEventListener('click', () => {
+        if (sidebarPanel?.classList.contains('mobile-open')) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    });
+
+    sidebarBackdrop?.addEventListener('click', closeSidebar);
+
     menuButton?.addEventListener('click', () => {
         if (menuPanel) menuPanel.hidden = !menuPanel.hidden;
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            closeSidebar();
+        }
+    });
+
+    window.addEventListener('orientationchange', () => {
+        if (window.innerWidth > 768) {
+            closeSidebar();
+        }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (window.innerWidth > 768) {
+            closeSidebar();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            closeSidebar();
+            if (menuPanel) menuPanel.hidden = true;
+        }
     });
 
     menuPanel?.querySelectorAll('[data-menu-action]').forEach((actionButton) => {

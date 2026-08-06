@@ -563,6 +563,12 @@ img, video {
 .msofi-ai-page {
     background: #ffffff;
     color: #000000;
+    min-height: 100dvh;
+    min-height: 100vh;
+    overflow: hidden;
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1416,29 +1422,291 @@ img, video {
     max-width: min(42%, 280px);
 }
 
+.msofi-ai-page .msofi-sidebar-toggle-btn {
+    display: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: #ffffff;
+    color: #000000;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.24s ease, transform 0.24s ease;
+}
+
+.msofi-ai-page .msofi-sidebar-toggle-btn:hover,
+.msofi-ai-page .msofi-sidebar-toggle-btn:focus {
+    background: rgba(0, 0, 0, 0.04);
+    outline: none;
+}
+
+.msofi-ai-page .msofi-sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1095;
+    display: none;
+}
+
+.msofi-ai-page .msofi-sidebar-backdrop.visible {
+    display: flex;
+}
+
+.msofi-ai-page .msofi-sidebar-panel {
+    position: relative;
+    width: min(320px, 32vw);
+    min-width: 280px;
+    max-width: 100%;
+    transition: transform 0.26s ease, width 0.26s ease, min-width 0.26s ease;
+}
+
+.msofi-ai-page .msofi-sidebar-panel.mobile-open {
+    transform: translateX(0);
+}
+
+.msofi-ai-page .msofi-workspace-shell {
+    min-height: 0;
+}
+
+.msofi-ai-page main {
+    width: 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.msofi-ai-page #messages-viewport {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 24px clamp(16px, 3vw, 28px);
+}
+
+.msofi-ai-page .msofi-composer-panel {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 12;
+    background: #ffffff;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.06);
+    padding: 16px 24px;
+}
+
+.msofi-ai-page .msofi-composer-panel form {
+    gap: 12px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.msofi-ai-page .msofi-composer-icon-button,
+.msofi-ai-page .btn-primary,
+.msofi-ai-page .btn-secondary,
+.msofi-ai-page #voice-input-btn {
+    min-height: 44px;
+}
+
+.msofi-ai-page #chat-text-input {
+    min-height: 48px;
+    padding: 12px 14px;
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.msofi-ai-page .luxury-card #welcome-message-card img {
+    width: clamp(56px, 18vw, 100px);
+    height: auto;
+}
+
+.msofi-ai-page .luxury-card #welcome-message-card {
+    width: 100%;
+    max-width: min(100%, 650px);
+    margin: 40px auto 0;
+    padding: 0 4px;
+}
+
+@media (max-width: 1024px) {
+    .msofi-ai-page .msofi-sidebar-panel {
+        width: min(280px, 30vw);
+        min-width: 240px;
+    }
+
+    .msofi-ai-page .msofi-topbar-inner {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
 @media (max-width: 768px) {
-    #messages-viewport {
-        padding: 16px 12px 20px;
+    .msofi-ai-page .msofi-sidebar-toggle-btn {
+        display: inline-flex;
     }
 
-    .ai-message-bubble {
-        max-width: 100%;
+    .msofi-ai-page .msofi-topbar {
+        padding: 12px 16px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
         width: 100%;
-        padding: 14px 14px;
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.92);
     }
 
-    .ai-message-toolbar {
-        opacity: 1;
+    .msofi-ai-page .msofi-topbar-left {
+        gap: 10px;
+        width: 100%;
+        min-width: 0;
     }
 
-    .ai-message-action {
+    .msofi-ai-page .msofi-topbar-title-label {
+        flex: 1 1 auto;
+        font-size: 16px;
+        min-width: 0;
+        white-space: normal;
+    }
+
+    .msofi-ai-page .msofi-topbar-mode-button {
+        width: 100%;
+    }
+
+    .msofi-ai-page .msofi-topbar-right {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-panel {
+        position: fixed;
+        inset: 0 auto auto 0;
+        width: min(280px, 100%);
+        max-width: 280px;
+        min-width: 0;
+        transform: translateX(-110%);
+        box-shadow: 20px 0 80px rgba(0, 0, 0, 0.22);
+        border-right: 1px solid rgba(0, 0, 0, 0.12);
+        background: #ffffff;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .msofi-ai-page .msofi-sidebar-panel.mobile-open {
+        transform: translateX(0);
+    }
+
+    .msofi-ai-page .msofi-sidebar-backdrop {
+        display: none;
+    }
+
+    .msofi-ai-page .msofi-sidebar-backdrop.visible {
+        display: flex;
+    }
+
+    .msofi-ai-page #messages-viewport {
+        padding: 16px 12px calc(140px + env(safe-area-inset-bottom));
+    }
+
+    .msofi-ai-page .msofi-composer-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 14px 16px calc(18px + env(safe-area-inset-bottom));
+        border-radius: 0;
+        box-shadow: 0 -12px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .msofi-ai-page .msofi-composer-panel form {
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+
+    .msofi-ai-page .msofi-composer-icon-button,
+    .msofi-ai-page .msofi-topbar-button,
+    .msofi-ai-page #voice-input-btn,
+    .msofi-ai-page .btn-primary {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-header-actions,
+    .msofi-ai-page .msofi-sidebar-nav {
+        gap: 8px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-search,
+    .msofi-ai-page .msofi-sidebar-collapse-btn {
+        width: 44px;
+        height: 44px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-brand-logo {
         width: 32px;
         height: 32px;
     }
 
-    .ai-bubble-typing {
+    .msofi-ai-page .msofi-sidebar-profile-footer {
+        padding-top: 14px;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .msofi-ai-page .msofi-sidebar-profile-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-brand {
+        gap: 8px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-link {
+        padding: 12px 8px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-link-icon {
+        font-size: 16px;
+        min-width: 20px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-link-label {
+        font-size: 14px;
+    }
+
+    body.msofi-ai-page {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+@media (max-width: 560px) {
+    .msofi-ai-page .msofi-topbar-right {
+        justify-content: flex-start;
+    }
+
+    .msofi-ai-page .msofi-topbar-mode-button {
+        font-size: 13px;
+    }
+
+    .msofi-ai-page .msofi-sidebar-panel {
+        width: min(100%, 100%);
         max-width: 100%;
-        width: fit-content;
+    }
+
+    .msofi-ai-page #messages-viewport {
+        padding: 14px 10px calc(150px + env(safe-area-inset-bottom));
+    }
+
+    .msofi-ai-page .msofi-composer-panel {
+        padding: 12px 14px calc(22px + env(safe-area-inset-bottom));
     }
 }
 

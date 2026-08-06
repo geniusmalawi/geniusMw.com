@@ -2,7 +2,7 @@
 <html lang="en" data-accessibility="default" data-font-size="medium">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Msofi AI Assistant - Genius Malawi</title>
     <meta name="description" content="Engage with Msofi AI, the premium super intelligence tailored for Malawi. Get assistance in homework, writing, coding, agriculture, business, medical information, and legal research.">
     
@@ -13,7 +13,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/style.css?v=2.0.2">
 </head>
-<body class="msofi-ai-page" style="display: flex; flex-direction: column; height: 100vh; max-height: 100vh; min-height: 100vh; overflow: hidden;">
+<body class="msofi-ai-page">
 
     <!-- ==========================================
          1. ANIMATED LUXURY SPLASH SCREEN
@@ -31,6 +31,7 @@
     <header class="msofi-topbar" style="z-index: 10;">
         <div class="msofi-topbar-inner">
             <div class="msofi-topbar-left">
+                <button type="button" id="msofi-sidebar-toggle-btn" class="msofi-sidebar-toggle-btn" aria-label="Open navigation">☰</button>
                 <span class="msofi-topbar-title-label">MSOFI AI</span>
                 <button type="button" id="msofi-mode-toggle" class="msofi-topbar-mode-button" aria-haspopup="true" aria-expanded="false">
                     <span>Choose Mode</span>
@@ -77,9 +78,10 @@
          3. WORKSPACE CONTAINER (SIDEBAR & CHAT)
          ========================================== -->
     <div class="msofi-workspace-shell" style="flex: 1 1 auto; display: flex; overflow: hidden; position: relative; min-height: 0;">
-        
+        <div id="msofi-sidebar-backdrop" class="msofi-sidebar-backdrop" hidden></div>
         <!-- Sidebar: Conversation History & Mode Configs -->
         <aside class="luxury-card msofi-sidebar-panel" style="width: min(320px, 32vw); border-radius: 0; border-top: none; border-bottom: none; border-left: none; display: flex; flex-direction: column; padding: 20px 16px; z-index: 5;">
+
             <div class="msofi-sidebar-header">
                 <div class="msofi-sidebar-brand">
                     <img src="../assets/Logo.png" alt="Msofi AI Logo" class="msofi-sidebar-brand-logo">
