@@ -1,10 +1,10 @@
-const CACHE_NAME = 'geniusmw-v2.0.2';
+const CACHE_NAME = 'geniusmw-v2.0.3';
 const CACHE_ASSETS = [
     '/',
     '/index.html',
     '/manifest.json',
-    '/css/style.css?v=2.0.2',
-    '/js/app.js?v=2.0.2',
+    '/css/style.css?v=2.0.3',
+    '/js/app.js?v=2.0.3',
     '/js/advertising.js?v=2.0.2',
     '/js/pwa-install.js?v=2.0.2',
     '/assets/Icon.png?v=2',

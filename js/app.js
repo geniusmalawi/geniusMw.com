@@ -14,12 +14,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     dismissSplashScreen();
     await synchronizeUserAuthState();
     initializeAccessibilityPreferences();
+    initializeResponsiveState();
     
     // 2. Event Registrations
     setupUniversalSearch();
     setupVoiceSearch();
     setupAdminConsoleTrigger();
     setupAccessibilityToggles();
+    setupResponsiveListeners();
     await populateSystemFeeds();
 });
 
@@ -39,6 +41,46 @@ function dismissSplashScreen() {
 function syncModalBodyLock() {
     const visibleModal = document.querySelector('.splash-screen:not(.hidden)');
     document.body.classList.toggle('modal-open', !!visibleModal);
+}
+
+function initializeResponsiveState() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    const isLandscape = width >= height;
+    const isFoldable = width >= 700 && width <= 1100 && height >= 600 && height <= 1100 && coarsePointer;
+
+    let device = 'desktop';
+    if (width < 480 || (coarsePointer && width < 900)) {
+        device = 'mobile';
+    } else if (width < 900) {
+        device = 'tablet';
+    } else if (width < 1280) {
+        device = 'laptop';
+    } else if (width < 1800) {
+        device = 'desktop';
+    } else {
+        device = 'large-monitor';
+    }
+
+    document.documentElement.setAttribute('data-device', isFoldable ? 'foldable' : device);
+    document.documentElement.setAttribute('data-orientation', isLandscape ? 'landscape' : 'portrait');
+    document.documentElement.setAttribute('data-viewport-width', String(width));
+    document.documentElement.setAttribute('data-viewport-height', String(height));
+}
+
+function setupResponsiveListeners() {
+    const onViewportChange = () => initializeResponsiveState();
+
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', onViewportChange);
+
+    const orientationQuery = window.matchMedia('(orientation: landscape)');
+    if (typeof orientationQuery.addEventListener === 'function') {
+        orientationQuery.addEventListener('change', onViewportChange);
+    } else if (typeof orientationQuery.addListener === 'function') {
+        orientationQuery.addListener(onViewportChange);
+    }
 }
 
 // ==========================================
