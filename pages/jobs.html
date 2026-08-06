@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jobs & Career Portal - Genius Malawi</title>
+    <meta name="description" content="Explore national career openings in Malawi. Find Government, NGO, Banking, ICT, and Agriculture roles with built-in Msofi AI CV & Cover Letter builders.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         1. ANIMATED SPLASH SCREEN / LOADER
+         ========================================== -->
+    <div id="jobs-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Jobs Portal Loading" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CORE NAVIGATION BAR
+         ========================================== -->
+    <header class="luxury-card" style="border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 16px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="../index.html">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo" style="height: 40px; width: auto;">
+                </a>
+                <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--gold-translucent); padding-left: 16px;">Careers & Career Development</span>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: center;">
+                <button id="open-ai-cv-btn" class="btn-primary" style="background: var(--gold-gradient); color: #000; padding: 10px 20px; font-size: 13px;">AI CV / Cover Letter Helper</button>
+                <a href="../index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 13px; border-color: transparent;">Back</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. ADVANCED SEARCH & DISCOVERY TERMINAL
+         ========================================== -->
+    <main class="container" style="flex: 1; padding-top: 40px; padding-bottom: 80px;">
+        
+        <section class="luxury-card" style="margin-bottom: 40px; padding: 24px;">
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                
+                <!-- Query Inputs -->
+                <div style="display: flex; gap: 12px; flex: 1; min-width: 280px;">
+                    <input type="text" id="job-search" class="form-control" placeholder="Search by Job Title, Company, or Skills...">
+                    <button id="job-search-btn" class="btn-primary" style="padding: 12px 24px;">Find Jobs</button>
+                </div>
+
+                <!-- Filters -->
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <select id="job-category-filter" class="form-control" style="width: 200px;">
+                        <option value="all">All Sectors</option>
+                        <option value="Government">Government</option>
+                        <option value="NGOs">NGOs</option>
+                        <option value="Banking">Banking</option>
+                        <option value="Nursing">Nursing</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="ICT">ICT</option>
+                        <option value="Agriculture">Agriculture</option>
+                        <option value="Education">Education</option>
+                        <option value="Hospitality">Hospitality</option>
+                        <option value="Construction">Construction</option>
+                    </select>
+
+                    <input type="text" id="job-location-filter" class="form-control" placeholder="Location (e.g., Lilongwe)" style="width: 180px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Career Openings Grid -->
+        <section>
+            <div id="jobs-grid" class="grid grid-cols-2" style="gap: 24px;">
+                <!-- Populated dynamically via jobs.js controller -->
+                <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px;">Indexing active job databases...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==========================================
+         4. MODAL: JOB DETAILS & APPLICATION
+         ========================================== -->
+    <div id="job-detail-modal" class="splash-screen hidden" style="background: rgba(5,5,5,0.9); backdrop-filter: blur(15px); overflow-y: auto;">
+        <div class="luxury-card" style="width: 100%; max-width: 980px; margin: 40px auto; padding: 32px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:24px; flex-wrap:wrap;">
+                <div>
+                    <h2 class="gold-text-gradient" style="margin:0; font-size: 24px;">Job Details</h2>
+                    <p id="job-detail-summary" style="margin:8px 0 0; color: var(--text-muted); font-size: 13px;">Review the full vacancy details and apply directly through Genius Malawi.</p>
+                </div>
+                <button id="close-job-detail-btn" class="btn-secondary" type="button" style="padding: 10px 18px;">Close</button>
+            </div>
+
+            <div id="job-detail-main" style="display:grid; gap:18px; margin-bottom: 28px;"></div>
+
+            <div style="display:grid; gap:18px;">
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <button id="job-save-btn" type="button" class="btn-secondary" style="padding: 10px 18px;">Save Job</button>
+                    <button id="job-share-btn" type="button" class="btn-secondary" style="padding: 10px 18px;">Share Job</button>
+                </div>
+
+                <div id="job-detail-actions"></div>
+
+                <div style="display:grid; gap:20px;">
+                    <div>
+                        <h3 style="margin-bottom: 12px; color: var(--text-primary);">Job Description</h3>
+                        <div id="job-detail-description-body" style="color: var(--text-secondary); line-height: 1.7; font-size: 14px;"></div>
+                    </div>
+
+                    <div style="display:grid; gap:12px;">
+                        <div>
+                            <h4 style="margin-bottom: 10px; color: var(--text-primary);">Requirements</h4>
+                            <ul id="job-detail-requirements-list" style="padding-left: 18px; color: var(--text-secondary); line-height: 1.7; font-size: 14px;"></ul>
+                        </div>
+
+                        <div>
+                            <h4 style="margin-bottom: 10px; color: var(--text-primary);">Employer Details</h4>
+                            <div id="job-detail-company-body" style="color: var(--text-secondary); line-height: 1.7; font-size: 14px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="job-detail-application-form" class="hidden" style="display:grid; gap:16px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 22px;">
+                    <h3 style="margin:0 0 8px; color: var(--text-primary);">Apply for this Job</h3>
+                    <p style="margin:0 0 16px; color: var(--text-muted); font-size: 13px;">Complete your details below and upload your CV to submit directly to the employer through Genius Malawi.</p>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+                        <input id="application-full-name" class="form-control" type="text" placeholder="Full name" required>
+                        <input id="application-email" class="form-control" type="email" placeholder="Email address" required>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+                        <input id="application-phone" class="form-control" type="text" placeholder="Mobile number" required>
+                        <input id="application-district" class="form-control" type="text" placeholder="District" required>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+                        <input id="application-portfolio" class="form-control" type="url" placeholder="Portfolio or website">
+                        <input id="application-linkedin" class="form-control" type="url" placeholder="LinkedIn profile">
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+                        <input id="application-expected-salary" class="form-control" type="text" placeholder="Expected salary">
+                        <input id="application-availability-date" class="form-control" type="date" placeholder="Available from">
+                    </div>
+
+                    <textarea id="application-cover-letter" class="form-control" rows="4" placeholder="Cover letter or message" style="resize: none;"></textarea>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:14px;">
+                        <label style="display:flex; flex-direction:column; gap:8px; font-size: 13px; color: var(--text-muted);">
+                            CV / Resume (PDF or DOCX)
+                            <input id="application-cv" class="form-control" type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required>
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:8px; font-size: 13px; color: var(--text-muted);">
+                            Certificates (optional)
+                            <input id="application-certificates" class="form-control" type="file" accept="application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*">
+                        </label>
+                    </div>
+
+                    <button id="application-submit-btn" type="submit" class="btn-primary" style="padding: 12px 18px; width: 180px;">Submit Application</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         5. MODAL: AI CV & COVER LETTER BUILDER
+         ========================================= -->
+    <div id="ai-cv-modal" class="splash-screen hidden" style="background: rgba(5,5,5,0.9); backdrop-filter: blur(15px); overflow-y: auto;">
+        <div class="luxury-card" style="width: 100%; max-width: 700px; margin: 40px auto; padding: 40px 32px;">
+            <h2 class="gold-text-gradient" style="font-size: 24px; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>Msofi AI CV & Cover Letter Generator</span>
+            </h2>
+            <p style="color: var(--text-muted); font-size: 13px; text-align: center; margin-bottom: 32px;">Provide your experience credentials and targeted role below. Msofi AI will instantly construct structural documents.</p>
+
+            <form id="ai-cv-form">
+                <div class="form-group">
+                    <label class="form-label">Document Objective</label>
+                    <select id="ai-document-type" class="form-control" required>
+                        <option value="cv">Professional Curriculum Vitae (CV)</option>
+                        <option value="cover_letter">Tailored Job Cover Letter</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Target Job Title & Company</label>
+                    <input type="text" id="ai-target-role" class="form-control" placeholder="E.g., Clinical Nurse at Queen Elizabeth Central Hospital" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Your Skills, Qualifications & Work History</label>
+                    <textarea id="ai-raw-history" class="form-control" rows="5" placeholder="Detail your highest degree, key certifications, past employments, and specialized skills..." required style="resize: none; font-family: var(--font-body);"></textarea>
+                </div>
+
+                <!-- Dynamic Output Area -->
+                <div id="ai-document-output-box" class="luxury-card" style="display: none; background: rgba(0,0,0,0.4); border-color: var(--gold-base); margin-bottom: 24px; padding: 20px; max-height: 400px; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 8px; margin-bottom: 12px;">
+                        <strong style="font-size: 12px; color: var(--gold-light); text-transform: uppercase;">Generated Document</strong>
+                        <button type="button" id="copy-ai-doc-btn" class="btn-secondary" style="padding: 6px 12px; font-size: 11px;">Copy Text</button>
+                    </div>
+                    <pre id="ai-doc-content-display" style="white-space: pre-wrap; font-family: var(--font-body); font-size: 13px; color: var(--text-secondary); line-height: 1.6;"></pre>
+                </div>
+
+                <div style="display: flex; gap: 16px;">
+                    <button type="submit" id="generate-ai-doc-btn" class="btn-primary" style="flex: 1;">Generate with Msofi AI</button>
+                    <button type="button" id="close-ai-cv-btn" class="btn-secondary" style="flex: 1;">Dismiss Helper</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Platform Footer -->
+    <footer style="text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gold-translucent); margin-top: auto;">
+        &copy; 2026 Genius Malawi. Powered by Msofi AI engines. Secure talent match systems.
+    </footer>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/jobs.js"></script>
+    <script type="module" src="../js/advertising.js"></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Msofi AI Assistant - Genius Malawi</title>
+    <meta name="description" content="Engage with Msofi AI, the premium super intelligence tailored for Malawi. Get assistance in homework, writing, coding, agriculture, business, medical information, and legal research.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="msofi-ai-page" style="display: flex; flex-direction: column; height: 100vh; max-height: 100vh; min-height: 100vh; overflow: hidden;">
+
+    <!-- ==========================================
+         1. ANIMATED LUXURY SPLASH SCREEN
+         ========================================== -->
+    <div id="ai-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Msofi AI Loader" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CHATGPT-STYLE TOP NAV
+         ========================================== -->
+    <header class="msofi-topbar" style="z-index: 10;">
+        <div class="msofi-topbar-inner">
+            <div class="msofi-topbar-left">
+                <span class="msofi-topbar-title-label">MSOFI AI</span>
+                <button type="button" id="msofi-mode-toggle" class="msofi-topbar-mode-button" aria-haspopup="true" aria-expanded="false">
+                    <span>Choose Mode</span>
+                    <span class="msofi-topbar-mode-caret">▼</span>
+                </button>
+                <div id="msofi-mode-dropdown" class="msofi-topbar-dropdown" hidden>
+                    <select id="ai-mode-select" class="form-control" aria-label="Select AI mode">
+                        <option value="general">Chat Assistant</option>
+                        <option value="homework">Homework Helper</option>
+                        <option value="coding">Coding Assistant</option>
+                        <option value="writer">Document Writer</option>
+                        <option value="pdf">PDF Summarizer</option>
+                        <option value="image">Image Generation</option>
+                        <option value="translation">Translation</option>
+                        <option value="business">Business Assistant</option>
+                        <option value="agriculture">Agriculture Assistant</option>
+                        <option value="medical">Medical Information Assistant</option>
+                        <option value="legal">Legal Research Assistant</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="msofi-topbar-right">
+                <button type="button" id="msofi-topbar-upgrade-btn" class="btn-secondary msofi-topbar-button">Upgrade</button>
+                <button type="button" id="msofi-share-btn" class="btn-secondary msofi-topbar-button">Share</button>
+                <div class="msofi-topbar-menu-wrap">
+                    <button type="button" id="msofi-topbar-menu-btn" class="msofi-topbar-menu-btn" aria-label="Open Msofi options">⋯</button>
+                    <div id="msofi-topbar-menu" class="msofi-topbar-menu" hidden>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="profile">Profile</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="history">Recent history</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="export">Export conversations</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="clear-current">Clear current chat</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="delete-chat">Delete chat</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="help">Help & support</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="about">About Msofi AI</button>
+                        <button type="button" class="msofi-topbar-menu-action" data-menu-action="signout">Sign out</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. WORKSPACE CONTAINER (SIDEBAR & CHAT)
+         ========================================== -->
+    <div class="msofi-workspace-shell" style="flex: 1 1 auto; display: flex; overflow: hidden; position: relative; min-height: 0;">
+        
+        <!-- Sidebar: Conversation History & Mode Configs -->
+        <aside class="luxury-card msofi-sidebar-panel" style="width: min(320px, 32vw); border-radius: 0; border-top: none; border-bottom: none; border-left: none; display: flex; flex-direction: column; padding: 20px 16px; z-index: 5;">
+            <div class="msofi-sidebar-header">
+                <div class="msofi-sidebar-brand">
+                    <img src="../assets/Logo.png" alt="Msofi AI Logo" class="msofi-sidebar-brand-logo">
+                </div>
+                <div class="msofi-sidebar-header-actions">
+                    <button type="button" class="msofi-sidebar-search" data-sidebar-action="search" aria-label="Search conversations">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"></circle>
+                            <path d="M16 16L21 21" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+                        </svg>
+                    </button>
+                    <button id="sidebar-collapse-btn" class="msofi-sidebar-collapse-btn" type="button" aria-label="Collapse sidebar">☰</button>
+                </div>
+            </div>
+
+            <div class="msofi-sidebar-nav" aria-label="Workspace sections">
+                <button id="new-chat-btn" type="button" class="msofi-sidebar-link"><span class="msofi-sidebar-link-icon">✏️</span><span class="msofi-sidebar-link-label">New chat</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="images"><span class="msofi-sidebar-link-icon">🖼</span><span class="msofi-sidebar-link-label">Images</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="library"><span class="msofi-sidebar-link-icon">📚</span><span class="msofi-sidebar-link-label">Library</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="plugins"><span class="msofi-sidebar-link-icon">🧩</span><span class="msofi-sidebar-link-label">Plugins</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="projects"><span class="msofi-sidebar-link-icon">📁</span><span class="msofi-sidebar-link-label">Projects</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="codex"><span class="msofi-sidebar-link-icon">💻</span><span class="msofi-sidebar-link-label">Codex</span></button>
+                <button type="button" class="msofi-sidebar-link" data-sidebar-action="more"><span class="msofi-sidebar-link-icon">⋯</span><span class="msofi-sidebar-link-label">More</span></button>
+            </div>
+
+            <div id="conversation-history-section" class="conversation-history-section">
+                <div class="conversation-history-header">
+                    <div>
+                        <label class="form-label" style="font-size: 11px; margin-bottom: 4px;">Recent</label>
+                    </div>
+                    <span id="conversation-history-count" class="conversation-history-count">0</span>
+                </div>
+                <div id="conversation-search-panel" class="conversation-search-panel" hidden>
+                    <div class="conversation-search-panel-header">
+                        <div class="conversation-search-panel-title">Search conversations</div>
+                        <button type="button" id="conversation-search-close-btn" class="conversation-search-close-btn" aria-label="Close search">✕</button>
+                    </div>
+                    <div class="conversation-search-input-row">
+                        <span class="conversation-search-input-icon" aria-hidden="true">⌕</span>
+                        <input type="search" id="conversation-search-panel-input" class="conversation-search-input" placeholder="Search recent chats" autocomplete="off">
+                    </div>
+                    <div id="conversation-search-results" class="conversation-search-results" role="listbox"></div>
+                </div>
+                <div id="chat-history-list" class="conversation-history-list">
+                    <p class="conversation-history-empty">No previous chat history found.</p>
+                </div>
+            </div>
+
+            <div id="msofi-sidebar-profile-footer" class="msofi-sidebar-profile-footer">
+                <button type="button" class="msofi-sidebar-profile-trigger" data-profile-action="open">
+                    <span id="msofi-sidebar-profile-avatar" class="msofi-sidebar-profile-avatar">M</span>
+                    <span class="msofi-sidebar-profile-meta">
+                        <strong id="msofi-sidebar-profile-name">Abraham Msofi</strong>
+                        <small id="msofi-sidebar-profile-plan">Free</small>
+                    </span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Conversational Interface Container -->
+        <main style="flex: 1 1 auto; display: flex; flex-direction: column; background: #ffffff; position: relative; overflow: hidden; min-height: 0;">
+            
+            <!-- Contextual Advisories (Dynamic rendering depending on active AI Mode) -->
+            <div id="ai-disclaimer-banner" class="luxury-card" style="display: none; border-radius: 0; border-top: none; border-left: none; border-right: none; background: #ffffff; border-color: rgba(0, 0, 0, 0.12); padding: 12px 24px; transition: var(--transition-smooth);">
+                <!-- Dynamic disclaimer content populated in JS, e.g., Medical / Legal warnings -->
+            </div>
+
+            <!-- Messages Stream Area -->
+            <div id="messages-viewport" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+                <!-- Initial Welcome Message Card -->
+                <div id="welcome-message-card" style="max-width: 650px; margin: 40px auto 0; text-align: center; animation: fadeIn 0.6s ease;">
+                    <img src="../assets/Icon.png" alt="Msofi AI Icon" style="width: 80px; height: 80px; margin: 0 auto 16px; filter: none;">
+                    <h2 style="font-size: 28px; margin-bottom: 12px; color: #000;">Meet Msofi AI</h2>
+                    <p style="font-size: 14px; color: #000; line-height: 1.6; margin-bottom: 24px;">
+                        Msofi is your specialized super intelligence trained to deliver premium academic, business, and operational insights. Explore various utility modes tailored to assist you.
+                    </p>
+                </div>
+            </div>
+
+            <!-- File Upload & Typing Toolbar Panel -->
+            <div class="msofi-composer-panel luxury-card" style="border-radius: 0; border-bottom: none; border-left: none; border-right: none; padding: 16px 24px; flex-shrink: 0;">
+                
+                <!-- Attachment/Upload status tracker -->
+                <div id="attachment-preview-box" style="display: none; align-items: center; justify-content: space-between; padding: 8px 16px; margin-bottom: 12px; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid rgba(0,0,0,0.16);">
+                    <span id="attachment-name" style="font-size: 13px; color: var(--text-primary); font-weight: 500;">document.pdf</span>
+                    <button id="cancel-attachment-btn" style="background: none; border: none; color: #000; cursor: pointer; font-size: 13px;">Remove</button>
+                </div>
+
+                <form id="chat-input-form" style="display: flex; gap: 12px; align-items: center;">
+                    <!-- Upload trigger (PDF, DOCX, etc.) -->
+                    <label id="attachment-menu-trigger" for="ai-file-uploader" class="msofi-composer-icon-button" aria-label="Upload document" role="button" tabindex="0">
+                        <span>＋</span>
+                    </label>
+                    <input type="file" id="ai-file-uploader" style="display: none;" accept=".pdf,.docx,.pptx,.xlsx">
+
+                    <!-- Chat Text Inputs -->
+                    <input type="text" id="chat-text-input" class="form-control" placeholder="Ask Msofi anything..." style="flex: 1; border-color: rgba(0,0,0,0.22);" autocomplete="off" required>
+
+                    <!-- Voice Input Button (Ready) -->
+                    <button type="button" id="voice-input-btn" class="btn-secondary" style="padding: 12px 18px;" aria-label="Record speech input">Voice</button>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-primary" style="padding: 12px 24px;">Send</button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+
+    <input type="file" id="msofi-profile-photo-uploader" accept="image/*" hidden>
+
+    <div id="msofi-feedback-layer" class="msofi-feedback-layer" aria-live="polite" aria-atomic="true"></div>
+    <div id="msofi-modal-overlay" class="msofi-modal-overlay" hidden></div>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/msofi-ai.js"></script>
+</body>
+</html>

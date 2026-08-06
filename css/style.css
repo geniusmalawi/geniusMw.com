@@ -1,0 +1,2265 @@
+/* =====================================================================
+   GENIUS MALAWI - SYSTEM-WIDE DESIGN FRAMEWORK & CSS DIRECTORY
+   Location: css/style.css
+   Purpose: Establishes global Dark Luxury visual tokens, responsive layout rules,
+            glassmorphism tokens, custom animations, accessibility overrides,
+            and layout classes for all sub-modules.
+   Dependencies: Google Fonts (Montserrat & Playfair Display)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+/* ==========================================
+   1. DESIGN TOKENS (CSS CUSTOM PROPERTIES)
+   ========================================== */
+:root {
+    /* Color Palette */
+    --bg-deep: #050505;
+    --bg-card: #111114;
+    --bg-card-hover: #19191e;
+    --text-primary: #ffffff;
+    --text-secondary: #ebebeb;
+    --text-muted: #8e8e93;
+
+    /* Metallic Gold Gradients & Solid Tokens */
+    --gold-base: #d4af37;
+    --gold-light: #f9e076;
+    --gold-dark: #99731f;
+    --gold-gradient: linear-gradient(135deg, #f9e076 0%, #d4af37 50%, #99731f 100%);
+    --gold-translucent: rgba(212, 175, 55, 0.15);
+    --gold-glow: rgba(212, 175, 55, 0.35);
+
+    /* National Heritage Selective Accents */
+    --heritage-red: #e21c26;
+    --heritage-green: #00a95c;
+    --error: #e21c26;
+    --success: #00a95c;
+
+    /* Structural Properties */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Montserrat', sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --shadow-luxury: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(212, 175, 55, 0.03);
+    --glass-card: rgba(17, 17, 20, 0.75);
+    --glass-border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+/* Accessibility: High Contrast Mode Overrides */
+html[data-accessibility="high-contrast"] {
+    --bg-deep: #000000;
+    --bg-card: #0c0c0e;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #e5e5e5;
+    --gold-base: #ffd700;
+    --gold-light: #ffffff;
+    --gold-dark: #b8860b;
+    --gold-gradient: none;
+    --gold-translucent: rgba(255, 255, 255, 0.3);
+    --glass-border: 2px solid #ffffff;
+}
+
+/* Accessibility: Fluid Font Sizing Overrides */
+html[data-font-size="large"] {
+    font-size: 115%;
+}
+html[data-font-size="xlarge"] {
+    font-size: 130%;
+}
+
+/* ==========================================
+   2. BASE STYLES & RESET
+   ========================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: var(--text-secondary);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    padding-bottom: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.msofi-workspace-shell {
+    padding-bottom: 0;
+    min-height: 0;
+}
+
+.msofi-workspace-shell .luxury-card,
+.msofi-workspace-shell .msofi-topbar,
+.msofi-workspace-shell .msofi-sidebar-panel,
+.msofi-workspace-shell > main {
+    min-height: 0;
+}
+
+.msofi-topbar {
+    min-width: 0;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 12px 24px;
+}
+
+.msofi-topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+}
+
+.msofi-topbar-left,
+.msofi-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.msofi-topbar-left {
+    position: relative;
+}
+
+.msofi-topbar-title-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #000;
+    letter-spacing: 0.02em;
+}
+
+.msofi-topbar-mode-button {
+    background: transparent;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    color: #000;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.msofi-topbar-mode-caret {
+    font-size: 11px;
+}
+
+.msofi-topbar-dropdown {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 8px);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    padding: 8px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    z-index: 20;
+}
+
+.msofi-topbar-dropdown .form-control {
+    min-width: 220px;
+}
+
+.msofi-topbar-menu-wrap {
+    position: relative;
+}
+
+.msofi-topbar-menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    color: #000;
+}
+
+.msofi-topbar-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    min-width: 210px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    z-index: 20;
+}
+
+.msofi-topbar-menu-action {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #000;
+    text-align: left;
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.msofi-topbar-menu-action:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.msofi-topbar-button {
+    padding: 8px 16px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.msofi-sidebar-panel {
+    width: min(340px, 32vw);
+    min-width: 280px;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+a {
+    color: var(--gold-light);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+a:hover {
+    color: var(--text-primary);
+    text-shadow: 0 0 8px var(--gold-glow);
+}
+
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================
+   3. ANIMATIONS & KEYFRAMES
+   ========================================== */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spinnerRotation {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes typingPulse {
+    0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: 0.45;
+    }
+    40% {
+        transform: translateY(-4px);
+        opacity: 1;
+    }
+}
+
+/* ==========================================
+   4. LAYOUT COMPONENTS & GLOBAL CONTAINERS
+   ========================================== */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.grid {
+    display: grid;
+    gap: 24px;
+}
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 1024px) {
+    .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .grid { grid-template-columns: 1fr !important; }
+    .container { padding: 0 16px; }
+}
+
+/* ==========================================
+   5. PREMIUM BRANDING ELEMENTS & SPLASH SCREENS
+   ========================================== */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    padding: 16px;
+    background-color: var(--bg-deep);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.splash-screen > .luxury-card {
+    width: 100%;
+    max-width: min(100%, 700px);
+    max-height: calc(100vh - 32px);
+    margin: 0 auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex-shrink: 0;
+}
+
+.splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-logo-container {
+    position: relative;
+    margin-bottom: 24px;
+    animation: fadeIn 1s ease-out;
+}
+
+.splash-logo {
+    width: 180px;
+    height: auto;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
+}
+
+@media (max-width: 768px) {
+    .splash-screen {
+        padding: 12px;
+    }
+
+    .splash-screen > .luxury-card {
+        max-height: calc(100vh - 24px);
+        padding: 24px 20px;
+    }
+}
+
+.splash-loader {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(212, 175, 55, 0.1);
+    border-top-color: var(--gold-base);
+    border-radius: 50%;
+    animation: spinnerRotation 1s linear infinite;
+}
+
+/* ==========================================
+   6. GLASSMORPHISM CARDS & CONTAINERS
+   ========================================== */
+.luxury-card {
+    background: var(--glass-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-luxury);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.luxury-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 175, 55, 0.3);
+    background-color: var(--bg-card-hover);
+}
+
+.luxury-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(212, 175, 55, 0.05),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.luxury-card:hover::before {
+    left: 100%;
+}
+
+/* ==========================================
+   7. INPUTS, BUTTONS & FORM ELEMENTS
+   ========================================== */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    display: block;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    background-color: rgba(10, 10, 12, 0.8);
+    border: var(--glass-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 15px;
+    transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--gold-base);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+/* Primary Luxury Gold Button */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gold-gradient);
+    border: none;
+    border-radius: var(--radius-md);
+    color: #000000;
+    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    filter: brightness(1.1);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Secondary Outlined Button */
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--gold-base);
+    border-radius: var(--radius-md);
+    color: var(--gold-light);
+    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 28px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.btn-secondary:hover {
+    background-color: rgba(212, 175, 55, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+}
+
+/* ==========================================
+   8. BADGES & INTERACTION CHANNELS
+   ========================================== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+}
+
+.badge-premium {
+    background: var(--gold-gradient);
+    color: #000000;
+    box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+}
+
+.badge-verified {
+    background-color: rgba(0, 169, 92, 0.15);
+    color: var(--heritage-green);
+    border: 1px solid rgba(0, 169, 92, 0.3);
+}
+
+.badge-danger {
+    background-color: rgba(226, 28, 38, 0.15);
+    color: var(--heritage-red);
+    border: 1px solid rgba(226, 28, 38, 0.3);
+}
+
+/* Universal Title Accent with Gold Text Gradient */
+.gold-text-gradient {
+    background: var(--gold-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+/* ==========================================
+   9. MSOFI AI CHAT EXPERIENCE ENHANCEMENTS
+   ========================================== */
+.msofi-ai-page {
+    background: #ffffff;
+    color: #000000;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.msofi-ai-page .msofi-topbar,
+.msofi-ai-page .msofi-sidebar-panel,
+.msofi-ai-page [id="messages-viewport"],
+.msofi-ai-page .luxury-card,
+.msofi-ai-page main {
+    background: #ffffff;
+    color: #000000;
+}
+
+.msofi-ai-page,
+.msofi-ai-page * {
+    --bg-deep: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --text-muted: #333333;
+    --gold-base: #000000;
+    --gold-light: #000000;
+    --gold-dark: #000000;
+    --gold-gradient: none;
+    --gold-translucent: rgba(0, 0, 0, 0.05);
+    --gold-glow: rgba(0, 0, 0, 0.08);
+    --heritage-red: #000000;
+    --heritage-green: #000000;
+    --error: #000000;
+    --success: #000000;
+    --shadow-luxury: none;
+    --glass-border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.msofi-ai-page .msofi-topbar,
+.msofi-ai-page .msofi-topbar *,
+.msofi-ai-page .msofi-topbar-menu,
+.msofi-ai-page .msofi-topbar-dropdown,
+.msofi-ai-page .msofi-topbar-menu-action,
+.msofi-ai-page .msofi-topbar-mode-button,
+.msofi-ai-page .msofi-topbar-title-label,
+.msofi-ai-page .msofi-topbar-mode-caret,
+.msofi-ai-page .msofi-topbar-menu-btn,
+.msofi-ai-page .msofi-composer-icon-button,
+.msofi-ai-page .msofi-composer-icon-button span,
+.msofi-ai-page .msofi-sidebar-panel,
+.msofi-ai-page .msofi-sidebar-profile-footer,
+.msofi-ai-page .msofi-sidebar-link,
+.msofi-ai-page .msofi-sidebar-link-label,
+.msofi-ai-page .conversation-history-section,
+.msofi-ai-page .conversation-history-row,
+.msofi-ai-page .ai-bubble-label,
+.msofi-ai-page .ai-message-action,
+.msofi-ai-page .typing-dot,
+.msofi-ai-page .badge-premium,
+.msofi-ai-page .badge-verified,
+.msofi-ai-page .badge-danger,
+.msofi-ai-page .gold-text-gradient,
+.msofi-ai-page .btn-primary,
+.msofi-ai-page .btn-secondary,
+.msofi-ai-page .form-control,
+.msofi-ai-page .form-control::placeholder,
+.msofi-ai-page select,
+.msofi-ai-page option,
+.msofi-ai-page a,
+.msofi-ai-page a:hover,
+.msofi-ai-page .ai-message-body,
+.msofi-ai-page .ai-response-stream,
+.msofi-ai-page .ai-markdown-paragraph,
+.msofi-ai-page .ai-code-block,
+.msofi-ai-page .ai-message-action.is-selected {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+.msofi-ai-page .msofi-topbar,
+.msofi-ai-page .msofi-topbar-menu,
+.msofi-ai-page .msofi-topbar-dropdown,
+.msofi-ai-page .msofi-topbar-menu-action,
+.msofi-ai-page .msofi-sidebar-panel,
+.msofi-ai-page .msofi-sidebar-profile-footer,
+.msofi-ai-page .msofi-composer-panel,
+.msofi-ai-page .conversation-history-row,
+.msofi-ai-page .ai-message-bubble,
+.msofi-ai-page .msofi-topbar-button,
+.msofi-ai-page .form-control,
+.msofi-ai-page .btn-primary,
+.msofi-ai-page .btn-secondary,
+.msofi-ai-page .btn-primary:hover,
+.msofi-ai-page .btn-secondary:hover,
+.msofi-ai-page .ai-message-action {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.16) !important;
+    box-shadow: none !important;
+}
+
+.msofi-ai-page .btn-primary,
+.msofi-ai-page .btn-secondary,
+.msofi-ai-page .ai-message-action {
+    border: 1px solid #000000 !important;
+}
+
+.msofi-ai-page .btn-primary {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.msofi-ai-page .btn-secondary {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+.msofi-ai-page .badge-premium,
+.msofi-ai-page .badge-verified,
+.msofi-ai-page .badge-danger {
+    background: rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(0, 0, 0, 0.18) !important;
+    color: #000000 !important;
+}
+
+.msofi-ai-page .gold-text-gradient {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: #000000 !important;
+}
+
+.msofi-ai-page .msofi-topbar-menu-action:hover,
+.msofi-ai-page .msofi-topbar-menu-action:focus,
+.msofi-ai-page .ai-message-action:hover,
+.msofi-ai-page .ai-message-action.is-selected {
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+.msofi-ai-page .typing-dot {
+    background: #000000 !important;
+    opacity: 0.75;
+}
+
+.msofi-ai-page .ai-message-action {
+    color: #000000 !important;
+}
+
+.msofi-ai-page a:hover {
+    color: #000000 !important;
+}
+
+.msofi-ai-page .msofi-sidebar-panel {
+    background: #ffffff;
+}
+
+.msofi-ai-page .msofi-sidebar-panel {
+    width: min(320px, 32vw);
+    min-width: 280px;
+    transition: width 0.26s ease, min-width 0.26s ease;
+    border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.msofi-ai-page .msofi-sidebar-panel.collapsed {
+    width: 92px;
+    min-width: 92px;
+}
+
+.msofi-ai-page .msofi-sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.msofi-ai-page .msofi-sidebar-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.msofi-ai-page .msofi-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.msofi-ai-page .msofi-sidebar-brand-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+}
+
+.msofi-ai-page .msofi-sidebar-collapse-btn,
+.msofi-ai-page .msofi-sidebar-search,
+.msofi-ai-page .msofi-sidebar-link,
+.msofi-ai-page .msofi-sidebar-profile-trigger,
+.msofi-ai-page .msofi-sidebar-upgrade-btn {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    color: #000;
+}
+
+.msofi-ai-page .msofi-sidebar-collapse-btn,
+.msofi-ai-page .msofi-sidebar-search {
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: #ffffff;
+    color: #000000;
+    border-radius: 999px;
+    padding: 0;
+}
+
+.msofi-ai-page .msofi-sidebar-search svg {
+    width: 16px;
+    height: 16px;
+    color: #000000;
+}
+
+.msofi-ai-page .msofi-sidebar-search:hover,
+.msofi-ai-page .msofi-sidebar-search:focus,
+.msofi-ai-page .msofi-sidebar-collapse-btn:hover,
+.msofi-ai-page .msofi-sidebar-collapse-btn:focus {
+    background: rgba(0, 0, 0, 0.04);
+    outline: none;
+}
+
+.msofi-ai-page .conversation-search-panel {
+    border: 1px solid rgba(0, 0, 0, 0.14);
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.msofi-ai-page .conversation-search-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.msofi-ai-page .conversation-search-panel-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #000000;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.msofi-ai-page .conversation-search-close-btn {
+    border: none;
+    background: transparent;
+    color: #000000;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 2px 4px;
+}
+
+.msofi-ai-page .conversation-search-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 10px;
+    background: #ffffff;
+    margin-bottom: 8px;
+}
+
+.msofi-ai-page .conversation-search-input-icon {
+    color: #000000;
+    font-size: 14px;
+}
+
+.msofi-ai-page .conversation-search-input {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    color: #000000;
+    flex: 1;
+    padding: 0;
+    font-size: 13px;
+}
+
+.msofi-ai-page .conversation-search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.msofi-ai-page .conversation-search-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+    color: #000000;
+    border-radius: 10px;
+    padding: 8px 10px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.msofi-ai-page .conversation-search-result.is-selected,
+.msofi-ai-page .conversation-search-result:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.msofi-ai-page .conversation-search-result-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #000000;
+}
+
+.msofi-ai-page .conversation-search-result-meta {
+    font-size: 11px;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.msofi-ai-page .conversation-search-empty {
+    font-size: 12px;
+    color: #000000;
+    padding: 8px 2px;
+}
+
+.msofi-ai-page .msofi-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 18px;
+}
+
+.msofi-ai-page .msofi-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 4px 0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.msofi-ai-page .msofi-sidebar-link.is-active {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.msofi-ai-page .msofi-sidebar-link-icon {
+    min-width: 18px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.msofi-ai-page .msofi-sidebar-profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-meta strong,
+.msofi-ai-page .msofi-sidebar-profile-meta small {
+    color: #000;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-meta strong {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.msofi-ai-page .msofi-sidebar-profile-meta small {
+    font-size: 11px;
+}
+
+.msofi-ai-page .msofi-sidebar-upgrade-btn {
+    padding: 6px 10px;
+    border: 1px solid #000;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-link-label,
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-profile-meta,
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-upgrade-btn,
+.msofi-ai-page .msofi-sidebar-panel.collapsed .conversation-history-section,
+.msofi-ai-page .msofi-sidebar-panel.collapsed #ai-mode-select,
+.msofi-ai-page .msofi-sidebar-panel.collapsed #delete-history-btn,
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-search {
+    display: none;
+}
+
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-link {
+    justify-content: center;
+    padding: 4px 0;
+}
+
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-profile-footer {
+    justify-content: center;
+}
+
+.msofi-ai-page .msofi-sidebar-panel.collapsed .msofi-sidebar-nav {
+    align-items: center;
+}
+
+.msofi-ai-page #messages-viewport {
+    background: #ffffff;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    padding: 24px clamp(16px, 3vw, 28px);
+    gap: 16px;
+}
+
+.msofi-ai-page .msofi-composer-panel {
+    background: #ffffff;
+}
+
+.msofi-ai-page .msofi-composer-icon-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #ffffff;
+    border: 1px solid #000;
+    border-radius: 14px;
+}
+
+.msofi-ai-page .msofi-composer-icon-button span {
+    font-size: 20px;
+    color: #000;
+    font-weight: 700;
+}
+
+.msofi-ai-page .ai-message-bubble {
+    background: #ffffff;
+    border: 1px solid #000000;
+    color: #000000;
+    box-shadow: none;
+}
+
+.msofi-ai-page .ai-message-bubble-user {
+    background: #ffffff;
+    border-color: #000000;
+}
+
+.msofi-ai-page .ai-message-bubble-assistant {
+    background: #ffffff;
+    border: 1px solid #000000;
+}
+
+.msofi-ai-page .ai-bubble-label,
+.msofi-ai-page .ai-message-body,
+.msofi-ai-page .ai-response-stream,
+.msofi-ai-page .ai-markdown-paragraph,
+.msofi-ai-page .ai-markdown-list li,
+.msofi-ai-page .ai-code-block,
+.msofi-ai-page .form-label,
+.msofi-ai-page .conversation-history-subtitle,
+.msofi-ai-page .conversation-history-empty,
+.msofi-ai-page .msofi-topbar-title span,
+.msofi-ai-page #chat-text-input,
+.msofi-ai-page #attachment-name,
+.msofi-ai-page #msofi-account-subtitle,
+.msofi-ai-page .msofi-account-link,
+.msofi-ai-page .conversation-search-input,
+.msofi-ai-page .form-control,
+.msofi-ai-page .msofi-topbar-pill {
+    color: #000000;
+}
+
+.msofi-ai-page .ai-message-body,
+.msofi-ai-page .ai-response-stream,
+.msofi-ai-page .ai-markdown-paragraph,
+.msofi-ai-page .ai-markdown-list li,
+.msofi-ai-page .ai-code-block {
+    color: #000000;
+}
+
+.msofi-ai-page .ai-message-body,
+.msofi-ai-page .ai-response-stream,
+.msofi-ai-page .ai-markdown-paragraph,
+.msofi-ai-page .ai-markdown-list li,
+.msofi-ai-page .conversation-history-subtitle,
+.msofi-ai-page .conversation-history-empty {
+    opacity: 1;
+    line-height: 1.7;
+}
+
+.msofi-ai-page .ai-bubble-label {
+    color: #666666;
+    letter-spacing: 0.02em;
+}
+
+.msofi-ai-page .form-control,
+.msofi-ai-page #chat-text-input,
+.msofi-ai-page .conversation-search-input,
+.msofi-ai-page .btn-secondary,
+.msofi-ai-page .btn-primary,
+.msofi-ai-page .msofi-account-link,
+.msofi-ai-page .msofi-topbar-button,
+.msofi-ai-page #voice-input-btn,
+.msofi-ai-page #new-chat-btn {
+    background: #ffffff;
+    border-color: #000000;
+    color: #000000;
+}
+
+.msofi-ai-page #chat-text-input::placeholder,
+.msofi-ai-page .conversation-search-input::placeholder {
+    color: #000000;
+}
+
+.msofi-ai-page .btn-primary {
+    background: #ffffff;
+    color: #000000;
+    border: 1px solid #000000;
+}
+
+.msofi-ai-page .btn-secondary:hover,
+.msofi-ai-page .btn-primary:hover,
+.msofi-ai-page .msofi-account-link:hover,
+.msofi-ai-page #voice-input-btn:hover,
+.msofi-ai-page #new-chat-btn:hover {
+    border-width: 2px;
+    color: #000000;
+    background: #ffffff;
+}
+
+.msofi-ai-page a,
+.msofi-ai-page .ai-message-body a,
+.msofi-ai-page .ai-response-stream a {
+    color: #000000;
+    text-decoration: underline;
+}
+
+.msofi-ai-page a:hover,
+.msofi-ai-page .ai-message-body a:hover,
+.msofi-ai-page .ai-response-stream a:hover {
+    text-decoration: underline;
+}
+
+.msofi-ai-page .ai-message-toolbar {
+    opacity: 1;
+}
+
+.msofi-ai-page .ai-message-action {
+    color: #000000;
+    background: #ffffff;
+    border: 1px solid #000000;
+}
+
+.msofi-ai-page .ai-message-action:hover {
+    color: #000000;
+    border-color: #000000;
+    background: #ffffff;
+}
+
+.msofi-ai-page .ai-message-action.is-selected {
+    color: #000000;
+    border-color: #000000;
+    background: #ffffff;
+}
+
+.msofi-ai-page .ai-message-action svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 1.8;
+}
+
+#messages-viewport::-webkit-scrollbar {
+    width: 8px;
+}
+
+#messages-viewport::-webkit-scrollbar-thumb {
+    background: #000000;
+    border-radius: 999px;
+}
+
+.ai-message-bubble {
+    width: auto;
+    max-width: min(92%, 860px);
+    min-width: 0;
+    padding: 16px 18px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.3s ease;
+    box-shadow: none;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    will-change: transform;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    hyphens: auto;
+}
+
+.ai-message-bubble:hover {
+    transform: translateY(-1px);
+}
+
+.ai-message-bubble-user {
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.ai-message-bubble-assistant {
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+.ai-bubble-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    letter-spacing: 0.6px;
+}
+
+.ai-message-body,
+.ai-response-stream {
+    font-size: 15px;
+    color: #000000;
+    line-height: 1.7;
+    width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+}
+
+.ai-message-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    opacity: 0.6;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.ai-message-bubble:hover .ai-message-toolbar {
+    opacity: 1;
+}
+
+.ai-message-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(212, 175, 55, 0.18);
+    color: var(--gold-light);
+    cursor: pointer;
+    font-size: 12px;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+}
+
+.ai-message-action:hover {
+    transform: translateY(-1px) scale(1.04);
+    background: rgba(212, 175, 55, 0.16);
+    border-color: rgba(212, 175, 55, 0.52);
+}
+
+.ai-message-action.is-selected {
+    background: rgba(212, 175, 55, 0.24);
+    border-color: rgba(212, 175, 55, 0.72);
+    color: var(--gold-base);
+}
+
+.ai-response-stream {
+    min-height: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ai-markdown-block + .ai-markdown-block {
+    margin-top: 8px;
+}
+
+.ai-markdown-paragraph,
+.ai-markdown-list,
+.ai-markdown-table,
+.ai-code-block {
+    margin: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.ai-markdown-paragraph {
+    color: #000000;
+    line-height: 1.7;
+    margin: 0 0 10px 0;
+}
+
+.ai-markdown-heading {
+    margin: 14px 0 8px 0;
+    color: #000000;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.ai-markdown-list {
+    padding-left: 20px;
+    margin: 8px 0 10px 0;
+}
+
+.ai-markdown-list li {
+    margin: 6px 0;
+    color: #000000;
+}
+
+.ai-markdown-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    margin: 10px 0 12px 0;
+    border: 1px solid #d9d9e3;
+    border-radius: 10px;
+}
+
+.ai-markdown-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    white-space: nowrap;
+    background: #ffffff;
+}
+
+.ai-markdown-table th,
+.ai-markdown-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ececf1;
+    text-align: left;
+    vertical-align: top;
+    color: #000000;
+}
+
+.ai-markdown-table th {
+    color: #000000;
+    background: #f7f7f8;
+    font-weight: 700;
+}
+
+.ai-inline-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    background: #f7f7f8;
+    padding: 2px 6px;
+    border-radius: 6px;
+    color: #000000;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.ai-code-block {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    color: #000000;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: #f8f8f8;
+    border: 1px solid #d9d9e3;
+    border-radius: 10px;
+    padding: 12px;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold-base);
+    opacity: 0.45;
+    animation: typingPulse 1.2s ease-in-out infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.16s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.32s;
+}
+
+.ai-bubble-typing {
+    min-width: 120px;
+    width: fit-content;
+    max-width: min(42%, 280px);
+}
+
+@media (max-width: 768px) {
+    #messages-viewport {
+        padding: 16px 12px 20px;
+    }
+
+    .ai-message-bubble {
+        max-width: 100%;
+        width: 100%;
+        padding: 14px 14px;
+    }
+
+    .ai-message-toolbar {
+        opacity: 1;
+    }
+
+    .ai-message-action {
+        width: 32px;
+        height: 32px;
+    }
+
+    .ai-bubble-typing {
+        max-width: 100%;
+        width: fit-content;
+    }
+}
+
+.msofi-scroll-to-bottom-btn {
+    position: fixed;
+    right: 22px;
+    bottom: 108px;
+    z-index: 30;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    outline: none;
+    background: #ffffff;
+    color: #000000;
+    font-size: 22px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 180ms ease, transform 180ms ease;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+}
+
+.msofi-scroll-to-bottom-btn.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.msofi-scroll-to-bottom-btn:hover {
+    background: #f3f3f3;
+    color: #000000;
+    border-color: #000000;
+}
+
+.msofi-ai-page .msofi-toast,
+.msofi-ai-page .msofi-modal-card,
+.msofi-ai-page .msofi-account-card,
+.msofi-ai-page .msofi-account-form input,
+.msofi-ai-page .msofi-account-form textarea {
+    background: #ffffff;
+    color: #000000;
+    border-color: rgba(0, 0, 0, 0.16) !important;
+    box-shadow: none !important;
+}
+
+.msofi-ai-page .msofi-modal-card {
+    border: 1px solid rgba(0, 0, 0, 0.16);
+}
+
+.msofi-ai-page .msofi-toast-icon {
+    background: rgba(0, 0, 0, 0.04);
+    color: #000000;
+}
+
+.msofi-ai-page .msofi-toast-title,
+.msofi-ai-page .msofi-toast-body,
+.msofi-ai-page .msofi-modal-title,
+.msofi-ai-page h1,
+.msofi-ai-page h2,
+.msofi-ai-page h3,
+.msofi-ai-page h4,
+.msofi-ai-page h5,
+.msofi-ai-page h6,
+.msofi-ai-page p,
+.msofi-ai-page label,
+.msofi-ai-page small,
+.msofi-ai-page span,
+.msofi-ai-page strong {
+    color: #000000;
+}
+
+.msofi-ai-page .msofi-modal-overlay {
+    background: rgba(255, 255, 255, 0.92);
+}
+
+.msofi-ai-page .msofi-account-photo-preview {
+    border: 2px solid rgba(0, 0, 0, 0.16);
+    background: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .msofi-scroll-to-bottom-btn {
+        right: 14px;
+        bottom: 92px;
+        width: 42px;
+        height: 42px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ai-message-bubble {
+        border-radius: 14px;
+    }
+
+    .ai-message-body,
+    .ai-response-stream {
+        font-size: 13px;
+    }
+}
+
+/* ==========================================
+   10. MSOFI AI ACCOUNT MENU
+   ========================================== */
+.msofi-account-meta h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.msofi-account-meta p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.msofi-account-card {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    background: rgba(255,255,255,0.03);
+}
+
+.msofi-account-card h4 {
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+.msofi-account-card p,
+.msofi-account-card li {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.msofi-account-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.msofi-account-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-primary);
+}
+
+.msofi-account-form input,
+.msofi-account-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(10,10,12,0.8);
+    color: var(--text-primary);
+}
+
+.msofi-account-form textarea {
+    min-height: 84px;
+    resize: vertical;
+}
+
+.msofi-account-photo-preview {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(212,175,55,0.25);
+    background: rgba(255,255,255,0.04);
+}
+
+.msofi-account-actions-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.msofi-account-actions-inline button {
+    flex: 1;
+    min-width: 120px;
+}
+
+.msofi-account-guest p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.msofi-account-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Conversation history sidebar */
+.conversation-history-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    min-height: 0;
+}
+
+.conversation-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.conversation-history-subtitle {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.conversation-history-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.05);
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 8px;
+}
+
+.conversation-search-input {
+    padding: 10px 12px;
+    font-size: 13px;
+    border: 1px solid rgba(0, 0, 0, 0.16);
+    background: #fff;
+}
+
+.conversation-history-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding-right: 4px;
+}
+
+.conversation-history-empty {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 20px;
+}
+
+.conversation-history-title-only {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    padding: 4px 0;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-history-title-only.active {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 1024px) {
+    .msofi-sidebar-panel {
+        width: min(300px, 34vw);
+        min-width: 260px;
+    }
+
+    .msofi-topbar-inner {
+        flex-wrap: wrap;
+    }
+}
+
+.msofi-feedback-layer {
+    position: fixed;
+    right: 18px;
+    bottom: 96px;
+    z-index: 1400;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.msofi-toast {
+    min-width: min(320px, calc(100vw - 32px));
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    animation: msofiToastIn 0.24s ease;
+    pointer-events: auto;
+}
+
+.msofi-toast[data-tone="success"],
+.msofi-toast[data-tone="error"],
+.msofi-toast[data-tone="warning"] {
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+.msofi-toast-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    background: rgba(0, 0, 0, 0.04);
+    color: #000000;
+}
+
+.msofi-toast-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+}
+
+.msofi-toast-body {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.msofi-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    z-index: 1500;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.msofi-modal-overlay:not([hidden]) {
+    display: flex;
+}
+
+.msofi-modal-card {
+    width: min(560px, 100%);
+    max-height: min(86vh, 760px);
+    overflow: auto;
+    background: rgba(17, 17, 20, 0.97);
+    border: 1px solid rgba(212, 175, 55, 0.24);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-luxury);
+    padding: 22px;
+    animation: msofiToastIn 0.24s ease;
+}
+
+.msofi-modal-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.msofi-modal-title {
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.msofi-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+@keyframes msofiToastIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-bottom: calc(92px + env(safe-area-inset-bottom));
+    }
+
+    .msofi-topbar {
+        padding: 12px 16px;
+    }
+
+    .msofi-topbar-inner {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .msofi-topbar-left,
+    .msofi-topbar-right {
+        gap: 8px;
+    }
+
+    .msofi-topbar-title {
+        border-left: none;
+        padding-left: 0;
+        font-size: 13px;
+    }
+
+    .msofi-sidebar-panel {
+        width: min(100%, 280px);
+        min-width: 0;
+    }
+
+    .conversation-history-item {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 560px) {
+    .msofi-topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .msofi-topbar-title {
+        display: block;
+    }
+}
+
+/* ==========================================
+   11. ADMIN CONSOLE UI RESTORATION
+   ========================================== */
+.admin-shell {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 24px;
+    min-height: 100vh;
+    padding: 24px;
+}
+
+.admin-sidebar {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+    background: rgba(10, 10, 12, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+    padding: 24px 20px;
+    min-height: calc(100vh - 48px);
+    overflow: hidden;
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.admin-sidebar-brand img {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    object-fit: cover;
+    filter: drop-shadow(0 0 18px rgba(212, 175, 55, 0.25));
+}
+
+.admin-brand-title {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.admin-brand-subtitle {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.admin-mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 10010;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+}
+
+.admin-mobile-toggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.sidebar-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.sidebar-nav-group::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-nav-group::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.2);
+    border-radius: 999px;
+}
+
+.sidebar-group-title {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.admin-nav-item {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.admin-nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-primary);
+}
+
+.admin-nav-item.active {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.16), rgba(255, 255, 255, 0.05));
+    color: var(--text-primary);
+    border: 1px solid rgba(212, 175, 55, 0.22);
+}
+
+.admin-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    min-height: 120px;
+    border-radius: var(--radius-xl);
+    background: rgba(18, 18, 22, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    position: sticky;
+    top: 24px;
+    z-index: 1002;
+    backdrop-filter: blur(18px);
+}
+
+.admin-topbar-title {
+    font-size: 1.75rem;
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    color: var(--text-primary);
+}
+
+.admin-topbar-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    max-width: 620px;
+}
+
+.admin-topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.admin-user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 12px 16px;
+}
+
+.section-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+
+.section-toolbar h2 {
+    margin-bottom: 8px;
+    font-size: 1.7rem;
+    color: var(--text-primary);
+}
+
+.section-toolbar p {
+    color: var(--text-muted);
+    max-width: 760px;
+    line-height: 1.7;
+}
+
+.section-toolbar-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.metric-card {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(212, 175, 55, 0.05));
+    border: 1px solid rgba(212, 175, 55, 0.14);
+}
+
+.metric-card span {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.metric-card strong {
+    font-size: 2rem;
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.dashboard-grid > section {
+    min-height: 360px;
+}
+
+.luxury-card h3,
+.luxury-card h4 {
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+.placeholder-card {
+    min-height: 240px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.placeholder-card p {
+    color: var(--text-muted);
+    line-height: 1.8;
+}
+
+.form-control {
+    min-height: 46px;
+    border-radius: var(--radius-md);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.btn-secondary,
+.btn-primary {
+    min-height: 44px;
+}
+
+@media (max-width: 1200px) {
+    .admin-shell {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .admin-sidebar {
+        position: relative;
+        top: 0;
+        min-height: auto;
+        width: 100%;
+        max-width: 100%;
+        box-shadow: none;
+        margin-bottom: 20px;
+    }
+
+    .admin-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-shell {
+        padding: 16px 12px 24px;
+    }
+
+    .admin-topbar {
+        padding: 22px 20px;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-toolbar {
+        gap: 14px;
+    }
+
+    .admin-nav-item {
+        padding: 12px 14px;
+        font-size: 0.9rem;
+    }
+
+    .admin-sidebar {
+        position: fixed;
+        inset: 0 auto auto 0;
+        width: min(320px, 100%);
+        max-width: 320px;
+        min-height: 100vh;
+        transform: translateX(-110%);
+        transition: transform var(--transition-smooth);
+        z-index: 10005;
+        box-shadow: 24px 0 80px rgba(0, 0, 0, 0.55);
+        padding-top: 72px;
+        overflow-y: auto;
+    }
+
+    .admin-sidebar.collapsed {
+        transform: translateX(0);
+    }
+
+    .admin-mobile-toggle {
+        display: inline-flex;
+    }
+
+    .admin-main {
+        padding-top: 72px;
+    }
+
+    .admin-topbar-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .section-toolbar-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+}

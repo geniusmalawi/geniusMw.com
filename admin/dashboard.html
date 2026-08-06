@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin Console - Genius Malawi</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="admin-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Admin Authorization" class="splash-logo">
+        </div>
+        <div class="splash-loader" style="border-top-color: var(--heritage-red);"></div>
+    </div>
+
+    <div class="admin-shell">
+        <aside class="admin-sidebar">
+            <div class="admin-sidebar-brand">
+                <a href="../index.html" class="admin-brand-link">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo">
+                </a>
+                <div>
+                    <div class="admin-brand-title">Genius Malawi</div>
+                    <div class="admin-brand-subtitle">Enterprise Admin</div>
+                </div>
+            </div>
+
+            <button id="admin-sidebar-toggle" class="admin-mobile-toggle" type="button">☰</button>
+
+            <div class="sidebar-nav-group">
+                <div class="sidebar-group-title">Workspace</div>
+                <button class="admin-nav-item active" data-admin-section="dashboard" type="button">📊 Overview</button>
+                <button class="admin-nav-item" data-admin-section="users" type="button">👥 Users</button>
+                <button class="admin-nav-item" data-admin-section="books" type="button">📚 Books & Education</button>
+                <button class="admin-nav-item" data-admin-section="jobs" type="button">💼 Jobs & Careers</button>
+                <button class="admin-nav-item" data-admin-section="football" type="button">⚽ Football Live</button>
+                <button class="admin-nav-item" data-admin-section="news" type="button">📰 News Management</button>
+                <button class="admin-nav-item" data-admin-section="government" type="button">🏛️ Government Services</button>
+                <button class="admin-nav-item" data-admin-section="media" type="button">🎬 Media & Entertainment</button>
+                <button class="admin-nav-item" data-admin-section="advertising" type="button">📢 Advertising</button>
+                <button class="admin-nav-item" data-admin-section="payments" type="button">💳 Payments</button>
+                <button class="admin-nav-item" data-admin-section="reports" type="button">📈 Reports</button>
+                <button class="admin-nav-item" data-admin-section="notifications" type="button">🔔 Notifications</button>
+                <button class="admin-nav-item" data-admin-section="settings" type="button">⚙️ Settings</button>
+                <button class="admin-nav-item" data-admin-section="security" type="button">🛡️ Security</button>
+            </div>
+        </aside>
+
+        <main class="admin-main">
+            <header class="admin-topbar luxury-card">
+                <div>
+                    <div class="admin-topbar-title">Super Admin Control Panel</div>
+                    <div class="admin-topbar-subtitle">Professional operations dashboard for the Genius Malawi platform</div>
+                </div>
+                <div class="admin-topbar-actions">
+                    <div class="admin-user-pill">
+                        <span class="badge badge-danger">Class 1 Admin</span>
+                        <span style="font-size: 12px; color: var(--text-muted);">Secure Access</span>
+                    </div>
+                    <a href="../index.html" class="btn-secondary" style="padding: 8px 16px; font-size: 12px;">Exit</a>
+                </div>
+            </header>
+
+            <section id="admin-section-dashboard" class="admin-panel-section">
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Executive Overview</h2>
+                        <p>Monitor platform activity, approvals, and major business operations from one place.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Refresh</button>
+                        <button class="btn-primary" type="button">Create Report</button>
+                    </div>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="luxury-card metric-card">
+                        <span>Total Users</span>
+                        <strong id="metric-users">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>News Articles</span>
+                        <strong id="metric-news-overview">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Jobs</span>
+                        <strong id="metric-jobs-overview">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Government Services</span>
+                        <strong id="metric-government-overview">-</strong>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="luxury-card">
+                        <h3>Workspace Summary</h3>
+                        <div id="workspace-summary-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
+                    </section>
+                    <section class="luxury-card">
+                        <h3>Quick Actions</h3>
+                        <div id="workspace-quick-actions" style="display: grid; gap: 10px; margin-top: 16px;"></div>
+                    </section>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="luxury-card">
+                        <h3>Recent Activity</h3>
+                        <div id="recent-activity-list" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
+                    </section>
+                    <section class="luxury-card">
+                        <h3>Module Health</h3>
+                        <div id="workspace-module-health" style="display: flex; flex-direction: column; gap: 12px; margin-top: 16px;"></div>
+                    </section>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="luxury-card">
+                        <h3>Content Snapshot</h3>
+                        <div id="overview-chart-content" style="min-height: 220px; margin-top: 16px;"></div>
+                    </section>
+                    <section class="luxury-card">
+                        <h3>Payment Verifications</h3>
+                        <div id="admin-payments-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                    </section>
+                </div>
+            </section>
+
+            <section id="admin-section-users" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Users & Access</h2>
+                        <p>Manage platform access, verification, and account security in a focused workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button" id="user-refresh-btn">Refresh</button>
+                        <button class="btn-primary" type="button" id="user-add-btn">Add User</button>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="luxury-card metric-card">
+                        <span>Total Users</span>
+                        <strong id="user-metric-total">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Active Users</span>
+                        <strong id="user-metric-active">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Suspended Users</span>
+                        <strong id="user-metric-suspended">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Administrators</span>
+                        <strong id="user-metric-admin">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Businesses</span>
+                        <strong id="user-metric-business">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Sellers</span>
+                        <strong id="user-metric-seller">-</strong>
+                    </div>
+                </div>
+
+                <div class="luxury-card" style="margin-bottom: 20px;">
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                        <input id="user-search" class="form-control" type="search" placeholder="Search by name, email, phone, role" style="min-width: 260px; flex: 1;">
+                        <select id="user-role-filter" class="form-control" style="min-width: 160px;">
+                            <option value="all">All Roles</option>
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                            <option value="seller">Seller</option>
+                            <option value="business">Business</option>
+                            <option value="super_admin">Super Admin</option>
+                        </select>
+                        <select id="user-status-filter" class="form-control" style="min-width: 160px;">
+                            <option value="all">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="luxury-card">
+                    <div id="users-table-container"></div>
+                    <div id="users-empty-state" style="display: none; padding: 20px; color: var(--text-muted); text-align: center;"></div>
+                </div>
+
+                <div id="user-add-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.72); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div style="width: min(620px, 100%); background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <h3 style="margin: 0; color: var(--text-primary);">Add User</h3>
+                            <button class="btn-secondary" type="button" id="user-add-cancel">Cancel</button>
+                        </div>
+                        <form id="user-add-form" style="display: grid; gap: 12px;">
+                            <input id="user-add-full-name" class="form-control" type="text" placeholder="Full name" required>
+                            <input id="user-add-email" class="form-control" type="email" placeholder="Email" required>
+                            <input id="user-add-password" class="form-control" type="password" placeholder="Temporary password" required>
+                            <input id="user-add-phone" class="form-control" type="text" placeholder="Phone number">
+                            <select id="user-add-role" class="form-control">
+                                <option value="user">User</option>
+                                <option value="business">Business</option>
+                                <option value="seller">Seller</option>
+                                <option value="super_admin">Super Admin</option>
+                                <option value="news_publisher">News Publisher</option>
+                            </select>
+                            <select id="user-add-status" class="form-control">
+                                <option value="active">Active</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px;">
+                                <button class="btn-secondary" type="button" id="user-add-close">Close</button>
+                                <button class="btn-primary" type="submit">Create User</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="user-profile-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;" role="dialog" aria-modal="true">
+                    <div style="width: min(720px, 100%); max-height: 90vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <h3 style="margin: 0; color: var(--text-primary);">User Profile</h3>
+                            <button class="btn-secondary" type="button" onclick="window.closeUserProfile()">Close</button>
+                        </div>
+                        <div id="user-profile-modal-body"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-business" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Business Pages</h2>
+                        <p>Review business registrations, verify pages, and keep listings compliant with quick moderation controls.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <input id="business-search" class="form-control" type="text" placeholder="Search by business, owner, email, phone, category, district" style="min-width: 320px;">
+                        <select id="business-status-filter" class="form-control" style="min-width: 150px;">
+                            <option value="all">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="verified">Verified</option>
+                            <option value="suspended">Suspended</option>
+                            <option value="deleted">Deleted</option>
+                        </select>
+                        <select id="business-category-filter" class="form-control" style="min-width: 180px;">
+                            <option value="all">All Categories</option>
+                        </select>
+                        <select id="business-district-filter" class="form-control" style="min-width: 180px;">
+                            <option value="all">All Districts</option>
+                        </select>
+                        <button class="btn-secondary" type="button" id="business-refresh-btn">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="luxury-card metric-card">
+                        <span>Total Pages</span>
+                        <strong id="business-metric-total">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Active Pages</span>
+                        <strong id="business-metric-active">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Verified</span>
+                        <strong id="business-metric-verified">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Pending</span>
+                        <strong id="business-metric-pending">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Suspended</span>
+                        <strong id="business-metric-suspended">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Followers</span>
+                        <strong id="business-metric-followers">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Posts</span>
+                        <strong id="business-metric-posts">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>New This Month</span>
+                        <strong id="business-metric-new">-</strong>
+                    </div>
+                </div>
+
+                <div class="luxury-card">
+                    <div id="business-pages-table-container"></div>
+                    <div id="business-pages-empty-state" style="display:none; padding: 20px; color: var(--text-muted);">No business pages found.</div>
+                </div>
+
+                <div id="business-page-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.82); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div style="width: min(1120px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;">
+                            <h3 style="margin:0; color:var(--text-primary);">Business Page Details</h3>
+                            <button class="btn-secondary" type="button" onclick="window.closeBusinessPageModal()">Close</button>
+                        </div>
+                        <div id="business-page-modal-body"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-marketplace" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Marketplace Operations</h2>
+                        <p>Approve, review, and manage marketplace listings with fast controls.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <span id="listings-queue-badge" class="badge badge-secondary">0 Pending</span>
+                        <span id="marketplace-admin-section-badge" class="badge badge-secondary">0 Pending</span>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="luxury-card metric-card">
+                        <span>Pending</span>
+                        <strong id="marketplace-metric-pending">0</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Approved</span>
+                        <strong id="marketplace-metric-approved">0</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Rejected</span>
+                        <strong id="marketplace-metric-rejected">0</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Sold</span>
+                        <strong id="marketplace-metric-sold">0</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Total</span>
+                        <strong id="marketplace-metric-total">0</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Sellers</span>
+                        <strong id="marketplace-metric-sellers">0</strong>
+                    </div>
+                </div>
+
+                <div class="luxury-card" style="margin-bottom: 20px;">
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;">
+                        <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+                            <button class="marketplace-admin-view-tab btn-secondary active" type="button" data-marketplace-view="pending">Pending</button>
+                            <button class="marketplace-admin-view-tab btn-secondary" type="button" data-marketplace-view="approved">Approved</button>
+                            <button class="marketplace-admin-view-tab btn-secondary" type="button" data-marketplace-view="rejected">Rejected</button>
+                            <button class="marketplace-admin-view-tab btn-secondary" type="button" data-marketplace-view="sold">Sold Products</button>
+                            <button class="marketplace-admin-view-tab btn-secondary" type="button" data-marketplace-view="all">All Listings</button>
+                        </div>
+                        <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                            <input id="marketplace-admin-search" class="form-control" type="search" placeholder="Search listings or seller" style="min-width:240px; flex:1;">
+                            <select id="marketplace-admin-category-filter" class="form-control" style="min-width:180px;">
+                                <option value="all">All Categories</option>
+                            </select>
+                            <select id="marketplace-admin-sort-filter" class="form-control" style="min-width:160px;">
+                                <option value="newest">Newest First</option>
+                                <option value="price-asc">Price: Low to High</option>
+                                <option value="price-desc">Price: High to Low</option>
+                            </select>
+                            <button id="marketplace-admin-refresh" class="btn-secondary" type="button">Refresh</button>
+                            <button id="marketplace-admin-reset" class="btn-secondary" type="button">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="luxury-card">
+                    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:center; margin-bottom:12px;">
+                        <h3 id="marketplace-admin-list-title" style="margin:0; color:var(--text-primary);">Pending Listings</h3>
+                        <span id="marketplace-admin-empty-state" class="badge badge-secondary">Live Queue</span>
+                    </div>
+                    <div id="admin-listings-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                    <div id="admin-marketplace-listings-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                </div>
+
+                <div id="marketplace-listing-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div style="width: min(1080px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;">
+                            <h3 style="margin:0; color:var(--text-primary);">Listing Details</h3>
+                            <button class="btn-secondary" type="button" onclick="window.closeMarketplaceListingModal()">Close</button>
+                        </div>
+                        <div id="marketplace-listing-modal-body"></div>
+                    </div>
+                </div>
+
+                <div id="marketplace-seller-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div style="width: min(760px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;">
+                            <h3 style="margin:0; color:var(--text-primary);">Seller Profile</h3>
+                            <button class="btn-secondary" type="button" onclick="window.closeMarketplaceSellerModal()">Close</button>
+                        </div>
+                        <div id="marketplace-seller-modal-body"></div>
+                    </div>
+                </div>
+
+                <div id="marketplace-gallery-lightbox" style="position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10001;">
+                    <div id="marketplace-gallery-lightbox-body" style="width: min(1100px, 100%); max-height: 92vh; overflow: auto; padding: 12px; display:flex; justify-content:center;"></div>
+                </div>
+            </section>
+
+            <section id="admin-section-media" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Media Hub Management</h2>
+                        <p>Manage Live TV, Live Radio, Original Videos and Music Streaming content.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button" id="media-refresh-btn">Refresh</button>
+                        <button class="btn-primary" type="button" id="media-add-btn">Add New</button>
+                    </div>
+                </div>
+
+                <div class="luxury-card">
+                    <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+                        <div class="media-tabs" style="display:flex; gap:8px;">
+                            <button class="media-tab btn-secondary active" data-media-tab="tv">Live TV</button>
+                            <button class="media-tab btn-secondary" data-media-tab="radio">Live Radio</button>
+                            <button class="media-tab btn-secondary" data-media-tab="videos">Original Videos</button>
+                            <button class="media-tab btn-secondary" data-media-tab="music">Music Streaming</button>
+                        </div>
+                        <input id="media-search" class="form-control" type="search" placeholder="Search media..." style="min-width:260px; flex:1;">
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <select id="media-filter" class="form-control"><option value="all">All</option><option value="active">Active</option><option value="disabled">Disabled</option><option value="archived">Archived</option><option value="featured">Featured</option></select>
+                            <button id="media-bulk-action-btn" class="btn-secondary">Bulk Actions</button>
+                        </div>
+                    </div>
+
+                    <div id="media-list-container"></div>
+                    <div id="media-empty-state" style="display:none; padding:20px; color:var(--text-muted); text-align:center;">No media found.</div>
+                </div>
+
+                <div id="media-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div id="media-modal-body" style="width: min(980px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);"></div>
+                </div>
+            </section>
+
+            <section id="admin-section-books" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Books & Education</h2>
+                        <p>Keep the learning ecosystem organized, searchable, and easy to manage.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Filters</button>
+                        <button class="btn-primary" type="button">Add Resource</button>
+                    </div>
+                </div>
+                <div class="luxury-card placeholder-card">
+                    <h3>Library operations</h3>
+                    <p>Books, past papers, and education resources are now grouped into a dedicated module for quick administration.</p>
+                </div>
+            </section>
+
+            <section id="admin-section-jobs" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Jobs & Careers</h2>
+                        <p>Manage job vacancies, applications, employers, and career operations from one secure workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <input id="jobs-search" class="form-control" type="search" placeholder="Search by title, company, category, district" style="min-width: 240px;">
+                        <select id="jobs-status-filter" class="form-control" style="min-width: 160px;">
+                            <option value="all">All Statuses</option>
+                            <option value="published">Published</option>
+                            <option value="pending">Draft / Pending</option>
+                            <option value="closed">Closed</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                        <select id="jobs-category-filter" class="form-control" style="min-width: 160px;">
+                            <option value="all">All Categories</option>
+                        </select>
+                        <select id="jobs-district-filter" class="form-control" style="min-width: 160px;">
+                            <option value="all">All Districts</option>
+                        </select>
+                        <button class="btn-secondary" type="button" id="jobs-refresh-btn">Refresh</button>
+                        <button class="btn-primary" type="button" id="jobs-create-btn">New Job</button>
+                    </div>
+                </div>
+
+                <div class="metrics-grid" style="margin-bottom: 20px;">
+                    <div class="luxury-card metric-card">
+                        <span>Total Jobs</span>
+                        <strong id="jobs-metric-total">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Active Jobs</span>
+                        <strong id="jobs-metric-active">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Closed Jobs</span>
+                        <strong id="jobs-metric-closed">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Draft Jobs</span>
+                        <strong id="jobs-metric-draft">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Featured Jobs</span>
+                        <strong id="jobs-metric-featured">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Total Applications</span>
+                        <strong id="jobs-metric-applications">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Applications Today</span>
+                        <strong id="jobs-metric-applications-today">-</strong>
+                    </div>
+                    <div class="luxury-card metric-card">
+                        <span>Expiring Soon</span>
+                        <strong id="jobs-metric-expiring">-</strong>
+                    </div>
+                </div>
+
+                <div class="luxury-card">
+                    <div id="jobs-table-container"></div>
+                    <div id="jobs-empty-state" style="display:none; padding: 20px; color: var(--text-muted); text-align: center;"></div>
+                </div>
+
+                <div id="job-applicants-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.82); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 10000;">
+                    <div style="width: min(980px, 100%); max-height: 92vh; overflow: auto; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 18px 50px rgba(0,0,0,0.35);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px;">
+                            <h3 style="margin:0; color: var(--text-primary);">Job Applicants</h3>
+                            <button class="btn-secondary" type="button" id="job-applicants-close">Close</button>
+                        </div>
+                        <div id="job-applicants-list" style="display:grid; gap:14px;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-football" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Football Live</h2>
+                        <p>Manage live matches, upcoming fixtures, and streaming links from a dedicated console.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <span id="content-queue-badge" class="badge badge-secondary">0 Items</span>
+                        <button class="btn-secondary" type="button">Upcoming</button>
+                        <button class="btn-primary" type="button">Add Match</button>
+                    </div>
+                </div>
+                <div class="luxury-card">
+                    <h3>Content Management</h3>
+                    <div id="admin-content-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                    <form id="football-match-form" style="margin-top: 24px; display: flex; flex-direction: column; gap: 12px;">
+                        <h4 style="font-size: 15px; color: var(--text-primary);">Add Football Match Stream</h4>
+                        <input type="text" id="football-title" class="form-control" placeholder="Match title" required>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                            <input type="text" id="football-home" class="form-control" placeholder="Home team" required>
+                            <input type="text" id="football-away" class="form-control" placeholder="Away team" required>
+                        </div>
+                        <input type="text" id="football-competition" class="form-control" placeholder="Competition">
+                        <input type="hidden" id="football-stream-type" value="auto">
+                        <div style="padding: 12px 14px; border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-md); background: rgba(255,255,255,0.03); color: var(--text-muted); font-size: 13px;">
+                            Stream type is detected automatically from the URL (YouTube, Vimeo, HLS, MP4/WebM, or External Website).
+                        </div>
+                        <input type="text" id="football-stream" class="form-control" placeholder="Live Stream URL" required>
+                        <input type="text" id="football-logo-home" class="form-control" placeholder="Home team logo URL (optional)">
+                        <input type="text" id="football-logo-away" class="form-control" placeholder="Away team logo URL (optional)">
+                        <input type="text" id="football-thumbnail" class="form-control" placeholder="Thumbnail URL (optional)">
+                        <textarea id="football-summary" class="form-control" rows="3" placeholder="Short match summary"></textarea>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <input type="datetime-local" id="football-kickoff" class="form-control" style="max-width: 260px;">
+                            <select id="football-status" class="form-control" style="max-width: 200px;">
+                                <option value="scheduled">Scheduled</option>
+                                <option value="live">Live</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                            <select id="football-publish-state" class="form-control" style="max-width: 200px;">
+                                <option value="published">Publish Immediately</option>
+                                <option value="draft">Save as Draft</option>
+                            </select>
+                            <input type="hidden" id="football-match-id">
+                            <button type="button" id="football-form-cancel" class="btn-secondary" style="padding: 10px 18px;" hidden>Cancel</button>
+                            <button type="submit" class="btn-primary" style="padding: 10px 18px;">Publish Match</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <section id="admin-section-news" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>News Management</h2>
+                        <p>Route news publishing, breaking stories, and feature content with an organized workflow.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Filters</button>
+                        <button class="btn-primary" type="button">Add New Article</button>
+                    </div>
+                </div>
+                <div class="luxury-card" style="display:grid; gap:18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0; color:var(--text-primary);">Category Manager</h3>
+                            <p style="margin:6px 0 0; color:var(--text-muted); font-size:13px;">Manage the categories shown across the public newsroom and editor forms.</p>
+                        </div>
+                        <button class="btn-primary" type="button" onclick="window.addNewsCategoryPrompt()">Add Category</button>
+                    </div>
+                    <div id="news-category-manager"></div>
+                </div>
+            </section>
+
+            <div id="news-ai-modal" class="splash-screen hidden" style="background:rgba(5,5,5,0.92); backdrop-filter:blur(16px); overflow-y:auto; z-index:10001;">
+                <div class="luxury-card" style="width:min(960px,100%); margin:28px auto; padding:24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0; font-size:22px; color:var(--text-primary);">Create News Article with AI</h3>
+                            <p style="margin:6px 0 0; font-size:13px; color:var(--text-muted);">Paste a press release or news article draft and let the AI extract structured editorial fields.</p>
+                        </div>
+                        <button type="button" id="news-ai-modal-close" style="border:1px solid #d9d9d9; background:#fff; color:#111; width:38px; height:38px; border-radius:999px; cursor:pointer; font-size:18px;">×</button>
+                    </div>
+                    <label for="news-ai-input" style="display:block; margin-bottom:10px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#333;">Paste your news article or press release here...</label>
+                    <textarea id="news-ai-input" rows="16" style="width:100%; border:1px solid #d9d9d9; border-radius:14px; padding:14px; font:inherit; color:#111; resize:vertical; min-height:260px; box-sizing:border-box;" placeholder="Paste your news article or press release here...\n\nExample:\n\nMALAWI EDUCATION MINISTRY RELEASE...\n\nThe Ministry announced today that...\n\nSource: Government Press Office\nAuthor: Nkosi Chirwa\n
+"></textarea>
+                    <div id="news-ai-status" style="margin-top:12px; color:#374151; font-size:13px;"></div>
+                    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:18px; flex-wrap:wrap;">
+                        <button type="button" id="news-ai-cancel" class="btn-secondary" style="padding:10px 16px;">Cancel</button>
+                        <button type="button" id="news-ai-extract" class="btn-primary" style="padding:10px 16px;">Extract Article</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="news-editor-modal" class="splash-screen hidden" style="background:rgba(5,5,5,0.92); backdrop-filter:blur(16px); overflow-y:auto; z-index:10001;">
+                <div class="luxury-card" style="width:min(1080px,100%); margin:28px auto; padding:24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0; font-size:22px; color:var(--text-primary);">News Editor</h3>
+                            <p style="margin:6px 0 0; font-size:13px; color:var(--text-muted);">Review the AI extraction, add images, and publish the article directly to the News Feed.</p>
+                        </div>
+                        <button type="button" id="news-editor-close" style="border:1px solid #d9d9d9; background:#fff; color:#111; width:38px; height:38px; border-radius:999px; cursor:pointer; font-size:18px;">×</button>
+                    </div>
+                    <form id="news-editor-form" style="display:grid; gap:16px;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                            <div>
+                                <label class="form-label">Headline</label>
+                                <input type="text" id="news-editor-headline" class="form-control" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Subtitle</label>
+                                <input type="text" id="news-editor-subtitle" class="form-control">
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                            <div>
+                                <label class="form-label">Category</label>
+                                <select id="news-editor-category" class="form-control" required>
+                                    <option value="National">National</option>
+                                    <option value="International">International</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Politics">Politics</option>
+                                    <option value="Technology">Technology</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Business">Business</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Opinion">Opinion</option>
+                                    <option value="Announcements">Announcements</option>
+                                    <option value="Custom">Custom</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="form-label">Publish Date</label>
+                                <input type="datetime-local" id="news-editor-publish-date" class="form-control">
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:center;">
+                            <div>
+                                <label class="form-label">Author</label>
+                                <input type="text" id="news-editor-author" class="form-control">
+                            </div>
+                            <div>
+                                <label class="form-label">Source</label>
+                                <input type="text" id="news-editor-source" class="form-control">
+                            </div>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                            <div>
+                                <label class="form-label">Tags</label>
+                                <input type="text" id="news-editor-tags" class="form-control" placeholder="Comma separated tags">
+                            </div>
+                            <div>
+                                <label class="form-label">Cover Caption</label>
+                                <input type="text" id="news-editor-cover-caption" class="form-control">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label">Summary</label>
+                            <textarea id="news-editor-summary" rows="3" class="form-control"></textarea>
+                        </div>
+                        <div>
+                            <label class="form-label">Full Article</label>
+                            <textarea id="news-editor-content" rows="10" class="form-control" style="resize:vertical;"></textarea>
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                            <div>
+                                <label class="form-label">Cover Image URL</label>
+                                <input type="text" id="news-cover-url" class="form-control" placeholder="Paste image URL">
+                            </div>
+                            <div>
+                                <label class="form-label">Upload Cover Image</label>
+                                <input type="file" id="news-cover-file" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                        <div id="news-cover-preview" style="display:none; padding:14px; border:1px solid rgba(0,0,0,0.08); border-radius:14px; background:#fafafa;"></div>
+                        <div style="display:grid; grid-template-columns:1fr auto; gap:12px; align-items:end;">
+                            <div>
+                                <label class="form-label">Add Gallery Image URL</label>
+                                <input type="text" id="news-gallery-url-input" class="form-control" placeholder="Paste image URL">
+                            </div>
+                            <button type="button" id="news-gallery-add-url-button" class="btn-secondary" style="height:44px;">Add Image</button>
+                        </div>
+                        <div>
+                            <label class="form-label">Upload Gallery Images</label>
+                            <input type="file" id="news-gallery-upload" class="form-control" accept="image/*" multiple>
+                        </div>
+                        <div id="news-gallery-list" style="display:grid; gap:12px;"></div>
+                        <div style="display:flex; justify-content:flex-end; gap:12px; flex-wrap:wrap;">
+                            <button type="button" id="news-editor-cancel" class="btn-secondary" style="padding:10px 16px;">Cancel</button>
+                            <button type="submit" id="news-editor-publish" class="btn-primary" style="padding:10px 16px;">Publish Article</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <section id="admin-section-government" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Government Services Manager</h2>
+                        <p>Manage portals, hotlines, and downloadable forms with dedicated admin controls.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Export</button>
+                        <button class="btn-primary" type="button">Add Portal</button>
+                    </div>
+                </div>
+                <div class="luxury-card">
+                    <div style="display: grid; gap: 24px;">
+                        <div>
+                            <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">Government Portals</h3>
+                            <form id="gov-portal-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                                <input type="text" id="gov-portal-institution" class="form-control" placeholder="Institution" required>
+                                <input type="text" id="gov-portal-label" class="form-control" placeholder="Button Label" required>
+                                <input type="text" id="gov-portal-url" class="form-control" placeholder="Official Website URL" required>
+                                <input type="text" id="gov-portal-description" class="form-control" placeholder="Description">
+                                <input type="number" id="gov-portal-order" class="form-control" placeholder="Display Order" value="0">
+                                <button type="submit" class="btn-primary" style="padding: 10px 16px;">Add Portal</button>
+                            </form>
+                            <div id="gov-admin-portals-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">Emergency Hotlines</h3>
+                            <form id="gov-hotline-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                                <input type="text" id="gov-hotline-name" class="form-control" placeholder="Institution Name" required>
+                                <input type="text" id="gov-hotline-number" class="form-control" placeholder="Hotline Number">
+                                <input type="text" id="gov-hotline-alt" class="form-control" placeholder="Alternative Number">
+                                <input type="text" id="gov-hotline-whatsapp" class="form-control" placeholder="WhatsApp Number">
+                                <input type="email" id="gov-hotline-email" class="form-control" placeholder="Email">
+                                <input type="text" id="gov-hotline-address" class="form-control" placeholder="Physical Address">
+                                <input type="text" id="gov-hotline-description" class="form-control" placeholder="Description">
+                                <input type="text" id="gov-hotline-category" class="form-control" placeholder="Category" value="General">
+                                <select id="gov-hotline-status" class="form-control">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                                <input type="text" id="gov-hotline-icon" class="form-control" placeholder="Icon">
+                                <input type="number" id="gov-hotline-order" class="form-control" placeholder="Display Order" value="0">
+                                <button type="submit" class="btn-primary" style="padding: 10px 16px;">Add Hotline</button>
+                            </form>
+                            <div id="gov-admin-hotlines-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">Government Forms</h3>
+                            <form id="gov-form-upload-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                                <input type="text" id="gov-form-title" class="form-control" placeholder="Form Title" required>
+                                <input type="text" id="gov-form-institution" class="form-control" placeholder="Government Institution" required>
+                                <input type="text" id="gov-form-category" class="form-control" placeholder="Category" value="General">
+                                <input type="text" id="gov-form-description" class="form-control" placeholder="Description">
+                                <input type="file" id="gov-form-file" class="form-control" accept="application/pdf" required>
+                                <input type="file" id="gov-form-thumbnail" class="form-control" accept="image/*">
+                                <input type="text" id="gov-form-version" class="form-control" placeholder="Version">
+                                <input type="date" id="gov-form-publish" class="form-control">
+                                <button type="submit" class="btn-primary" style="padding: 10px 16px;">Upload Form</button>
+                            </form>
+                            <div id="gov-admin-forms-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-media" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Media & Entertainment</h2>
+                        <p>Manage content publishing, live links, and editorial workflows from a dedicated in-dashboard workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Filters</button>
+                        <button class="btn-primary" type="button">Add Story</button>
+                    </div>
+                </div>
+                <div class="luxury-card" style="display:flex; flex-direction:column; gap:16px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+                        <div>
+                            <h3 style="margin:0; color:var(--text-primary);">Media Content Management</h3>
+                            <p style="margin:8px 0 0; color:var(--text-muted); font-size:13px;">Create, edit, archive, restore, search, and preview news posts without leaving the admin dashboard.</p>
+                        </div>
+                        <button type="button" id="media-manager-open-btn" class="btn-primary">Open Manager</button>
+                    </div>
+                    <div id="media-manager-summary" style="font-size:13px; color:var(--text-muted);"></div>
+                </div>
+
+                <div id="media-content-manager-modal" class="splash-screen hidden" style="background:rgba(5,5,5,0.92); backdrop-filter:blur(16px); overflow-y:auto; z-index:10001;">
+                    <div class="luxury-card" style="width:min(1240px, 100%); margin:28px auto; padding:24px; border:var(--glass-border);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap;">
+                            <div>
+                                <h3 style="margin:0; color:var(--text-primary);">Media Content Management</h3>
+                                <p style="margin:6px 0 0; color:var(--text-muted); font-size:13px;">Publish breaking stories, feature content, and live updates into the right editorial category.</p>
+                            </div>
+                            <button type="button" id="media-manager-close-btn" class="btn-secondary">Close</button>
+                        </div>
+
+                        <div style="display:grid; gap:24px; grid-template-columns:minmax(0, 1.25fr) minmax(320px, 0.75fr); align-items:start;">
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                                    <input type="text" id="media-manager-search" class="form-control" placeholder="Search news, summary, author..." style="min-width:240px; flex:1;">
+                                    <select id="media-manager-category-filter" class="form-control" style="min-width:200px;">
+                                        <option value="all">All Categories</option>
+                                        <option value="Breaking News">Breaking News</option>
+                                        <option value="National News">National News</option>
+                                        <option value="International News">International News</option>
+                                        <option value="Sports News">Sports News</option>
+                                        <option value="Entertainment News">Entertainment News</option>
+                                        <option value="Business News">Business News</option>
+                                        <option value="Technology News">Technology News</option>
+                                        <option value="Education News">Education News</option>
+                                        <option value="Health News">Health News</option>
+                                        <option value="Politics">Politics</option>
+                                        <option value="Lifestyle">Lifestyle</option>
+                                    </select>
+                                    <select id="media-manager-status-filter" class="form-control" style="min-width:160px;">
+                                        <option value="all">All Status</option>
+                                        <option value="active">Active</option>
+                                        <option value="archived">Archived</option>
+                                    </select>
+                                </div>
+
+                                <form id="media-manager-form" style="display:flex; flex-direction:column; gap:12px;">
+                                    <input type="hidden" id="media-manager-id">
+                                    <div style="display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));">
+                                        <select id="media-manager-category" class="form-control" required>
+                                            <option value="Breaking News">Breaking News</option>
+                                            <option value="National News">National News</option>
+                                            <option value="International News">International News</option>
+                                            <option value="Sports News">Sports News</option>
+                                            <option value="Entertainment News">Entertainment News</option>
+                                            <option value="Business News">Business News</option>
+                                            <option value="Technology News">Technology News</option>
+                                            <option value="Education News">Education News</option>
+                                            <option value="Health News">Health News</option>
+                                            <option value="Politics">Politics</option>
+                                            <option value="Lifestyle">Lifestyle</option>
+                                        </select>
+                                        <input type="text" id="media-manager-headline" class="form-control" placeholder="Headline" required>
+                                        <input type="text" id="media-manager-author" class="form-control" placeholder="Author">
+                                    </div>
+                                    <textarea id="media-manager-summary" class="form-control" rows="3" placeholder="Short summary"></textarea>
+                                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:8px 10px; border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); background:rgba(255,255,255,0.03);">
+                                        <button type="button" class="btn-secondary" style="padding:8px 10px; font-size:11px;" data-editor-command="bold">Bold</button>
+                                        <button type="button" class="btn-secondary" style="padding:8px 10px; font-size:11px;" data-editor-command="italic">Italic</button>
+                                        <button type="button" class="btn-secondary" style="padding:8px 10px; font-size:11px;" data-editor-command="underline">Underline</button>
+                                    </div>
+                                    <div id="media-manager-editor" class="form-control" contenteditable="true" style="min-height:160px; line-height:1.7; white-space:pre-wrap;"></div>
+                                    <div style="display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));">
+                                        <input type="file" id="media-manager-thumbnail" class="form-control" accept="image/*">
+                                        <input type="file" id="media-manager-images" class="form-control" accept="image/*" multiple>
+                                        <input type="text" id="media-manager-video-url" class="form-control" placeholder="Video URL (optional)">
+                                    </div>
+                                    <div style="display:grid; gap:12px; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));">
+                                        <input type="text" id="media-manager-source-url" class="form-control" placeholder="External Source Link (optional)">
+                                        <input type="text" id="media-manager-live-url" class="form-control" placeholder="Live News URL (optional)">
+                                        <input type="datetime-local" id="media-manager-publish-date" class="form-control">
+                                    </div>
+                                    <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:center;">
+                                        <label style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:12px;"><input type="checkbox" id="media-manager-featured"> Featured News</label>
+                                        <label style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:12px;"><input type="checkbox" id="media-manager-breaking"> Breaking News</label>
+                                    </div>
+                                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                                        <select id="media-manager-publish-state" class="form-control" style="min-width:200px;">
+                                            <option value="published">Publish Immediately</option>
+                                            <option value="draft">Save as Draft</option>
+                                        </select>
+                                        <button type="button" id="media-manager-preview-btn" class="btn-secondary">Preview</button>
+                                        <button type="button" id="media-manager-reset-btn" class="btn-secondary">Reset</button>
+                                        <button type="submit" class="btn-primary">Save Story</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div style="display:flex; flex-direction:column; gap:16px;">
+                                <div id="media-manager-preview-card" style="padding:16px; border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-md); background:rgba(255,255,255,0.03);"></div>
+                                <div id="media-manager-list" style="display:flex; flex-direction:column; gap:10px; max-height:560px; overflow:auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-advertising" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Advertising</h2>
+                        <p>Oversee banners, promotions, and sponsored content from a single dashboard workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button" id="advertising-refresh-btn">Refresh</button>
+                        <button class="btn-primary" type="button" id="advertising-create-btn">Add Advertisement</button>
+                    </div>
+                </div>
+
+                <div class="luxury-card" style="padding: 20px; margin-bottom: 16px;">
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom: 12px;">
+                        <input type="search" id="advertising-search" class="form-control" style="min-width:240px;" placeholder="Search advertisements">
+                        <select id="advertising-type-filter" class="form-control" style="min-width:200px;"></select>
+                        <select id="advertising-location-filter" class="form-control" style="min-width:220px;"></select>
+                    </div>
+                    <div id="advertising-stats" style="display:flex; gap:12px; flex-wrap:wrap; color:var(--text-muted); font-size:12px;"></div>
+                </div>
+
+                <div style="display:grid; gap:16px; grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);">
+                    <div class="luxury-card" style="padding: 20px;">
+                        <h3 style="margin-top: 0; color: var(--text-primary);">Advertisement Library</h3>
+                        <div id="advertising-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+                    </div>
+
+                    <div class="luxury-card" style="padding: 20px;">
+                        <h3 style="margin-top: 0; color: var(--text-primary);">Quick Designer</h3>
+                        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">Create banner, carousel, popup, video, and image campaigns with live publishing controls.</p>
+                        <form id="advertising-form" class="form-grid">
+                            <input type="hidden" id="advertising-id">
+                            <div class="form-group">
+                                <label class="form-label">Advertisement Title</label>
+                                <input type="text" id="advertising-title" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Advertisement Type</label>
+                                <select id="advertising-type" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Business / Advertiser Name</label>
+                                <input type="text" id="advertising-advertiser" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Upload Image</label>
+                                <input type="text" id="advertising-image-url" class="form-control" placeholder="Image URL">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Upload Multiple Images (Carousel)</label>
+                                <textarea id="advertising-carousel-images" class="form-control" rows="3" placeholder="One URL per line"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Upload Video (optional)</label>
+                                <input type="text" id="advertising-video-url" class="form-control" placeholder="Video URL">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Advertisement Description</label>
+                                <textarea id="advertising-description" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Button Text</label>
+                                <input type="text" id="advertising-button-text" class="form-control" value="Learn More">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Destination URL</label>
+                                <input type="text" id="advertising-destination-url" class="form-control" placeholder="https://example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" id="advertising-start-date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">End Date</label>
+                                <input type="date" id="advertising-end-date" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Display Priority</label>
+                                <select id="advertising-priority" class="form-control">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Display Location</label>
+                                <select id="advertising-location" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Target Audience</label>
+                                <select id="advertising-audience" class="form-control"></select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label style="display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:12px;"><input type="checkbox" id="advertising-active" checked> Active</label>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1; display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                                <button type="button" id="advertising-preview-btn" class="btn-secondary">Preview</button>
+                                <button type="button" id="advertising-draft-btn" class="btn-secondary">Save Draft</button>
+                                <button type="submit" class="btn-primary">Publish Immediately</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <section id="admin-section-payments" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Payments</h2>
+                        <p>Review premium subscriptions, transaction approvals, and revenue activity.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <span id="payments-queue-badge" class="badge badge-secondary">0 Pending</span>
+                        <button class="btn-secondary" type="button" onclick="window.refreshAdminQueues()">Refresh</button>
+                        <button class="btn-primary" type="button" onclick="document.querySelector('.marketplace-admin-view-tab[data-marketplace-view=\'pending\']')?.click()">Pending View</button>
+                    </div>
+                </div>
+                <div class="luxury-card">
+                    <h3>Payment Verifications</h3>
+                    <div id="admin-payments-section-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                </div>
+            </section>
+
+            <section id="admin-section-reports" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Reports & Analytics</h2>
+                        <p>Inspect platform performance and key business signals from a structured analytics workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Export CSV</button>
+                        <button class="btn-primary" type="button">Export Excel</button>
+                    </div>
+                </div>
+                <div class="luxury-card placeholder-card">
+                    <h3>Analytics workspace</h3>
+                    <p>The reporting modules are now grouped into a dedicated analytics console.</p>
+                </div>
+            </section>
+
+            <section id="admin-section-notifications" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Notifications</h2>
+                        <p>Send announcements and manage platform communications from one location.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Drafts</button>
+                        <button class="btn-primary" type="button">New Broadcast</button>
+                    </div>
+                </div>
+                <div class="luxury-card placeholder-card">
+                    <h3>Notification workspace</h3>
+                    <p>Push, email, and announcement controls are now organized under a dedicated communications section.</p>
+                </div>
+            </section>
+
+            <section id="admin-section-settings" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Settings</h2>
+                        <p>Adjust platform branding, system preferences, and key operational settings from a clean control workspace.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <button class="btn-secondary" type="button">Backup</button>
+                        <button class="btn-primary" type="button">Save Changes</button>
+                    </div>
+                </div>
+                <div class="luxury-card placeholder-card">
+                    <h3>Platform settings</h3>
+                    <p>Settings are now grouped into a dedicated management panel without disrupting the existing operational modules.</p>
+                </div>
+            </section>
+
+            <section id="admin-section-security" class="admin-panel-section" hidden>
+                <div class="section-toolbar">
+                    <div>
+                        <h2>Security & Compliance</h2>
+                        <p>Review unresolved alerts, compliance flags, and platform security logs.</p>
+                    </div>
+                    <div class="section-toolbar-actions">
+                        <span id="reports-queue-badge" class="badge badge-secondary">0 Open Alerts</span>
+                        <button class="btn-secondary" type="button">Export</button>
+                        <button class="btn-primary" type="button">Review</button>
+                    </div>
+                </div>
+                <div class="luxury-card">
+                    <h3>Security Alerts & Compliance Reports</h3>
+                    <div id="admin-reports-queue" style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

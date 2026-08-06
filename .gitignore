@@ -1,0 +1,29 @@
+# Environment files
+.env
+.env.*
+
+# Keep env.js because it contains only public configuration
+# env.js
+
+# Node
+node_modules/
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Secret files
+*.pem
+*.key
+*.p12
+*.pfx
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Local backups
+backup/
+temp/

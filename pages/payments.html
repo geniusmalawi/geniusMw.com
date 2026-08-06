@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upgrade to Premium - Genius Malawi</title>
+    <meta name="description" content="Unlock unlimited intelligence queries, prioritize your marketplace listings, and remove ads by upgrading your account to Premium.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         1. ANIMATED SPLASH SCREEN / LOADER
+         ========================================== -->
+    <div id="payment-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Billing Platform Loading" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CORE NAVIGATION BAR
+         ========================================== -->
+    <header class="luxury-card" style="border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 16px 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="../index.html">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo" style="height: 40px; width: auto;">
+                </a>
+                <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--gold-translucent); padding-left: 16px;">Premium Upgrades & Billing</span>
+            </div>
+            <a href="../index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. MAIN CONTEXT - BENEFITS & TRANSACTION FORMS
+         ========================================== -->
+    <main class="container" style="flex: 1; padding-top: 40px; padding-bottom: 80px;">
+        <div class="grid grid-cols-2" style="align-items: flex-start; gap: 40px;">
+            
+            <!-- Column 1: Pricing Table & Benefits Showcase -->
+            <section class="luxury-card" style="border-color: rgba(212, 175, 55, 0.35); padding: 40px;">
+                <span class="badge badge-premium" style="margin-bottom: 16px;">Recommended Tier</span>
+                <h1 style="font-size: 28px; margin-bottom: 8px;">Genius Premium Pass</h1>
+                <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px;">Elevate your digital experience in Malawi. Remove limitations and activate your full potential.</p>
+                
+                <div style="font-size: 36px; font-weight: 700; color: var(--text-primary); margin-bottom: 32px; font-family: var(--font-body);">
+                    MWK 5,000 <span style="font-size: 14px; color: var(--text-muted); font-weight: 500;">/ Month</span>
+                </div>
+
+                <!-- Premium Features Checkbox List -->
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px; font-size: 14px; color: var(--text-secondary); margin-bottom: 32px;">
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Unlimited conversational queries on Msofi AI</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Unlimited dynamic PDF summaries & image generation</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Complete Ad removal across the entire super platform</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Higher visibility and priority on Marketplace listings</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Verified Premium account badge to enhance trust</span>
+                    </li>
+                    <li style="display: flex; align-items: center; gap: 12px;">
+                        <span style="color: var(--heritage-green); font-weight: bold; font-size: 18px;">&check;</span>
+                        <span>Priority server responses & premium client support</span>
+                    </li>
+                </ul>
+
+                <button id="activate-billing-btn" class="btn-primary" style="width: 100%;">Upgrade Account Now</button>
+            </section>
+
+            <!-- Column 2: Payment Execution Form (Initially Hidden) -->
+            <section class="luxury-card" id="billing-step-section" style="display: none; padding: 40px; animation: fadeIn 0.5s ease;">
+                <h2 class="gold-text-gradient" style="font-size: 24px; margin-bottom: 12px;">Billing Portal</h2>
+                <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 24px;">Follow the directions for your selected transfer method, then upload your confirmation proof below.</p>
+                
+                <!-- Reference Number Block -->
+                <div style="background: rgba(255,255,255,0.02); padding: 16px; border-radius: var(--radius-md); border: var(--glass-border); margin-bottom: 24px; text-align: center;">
+                    <span style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Your Unique Invoice Reference</span>
+                    <strong id="billing-reference-display" style="font-size: 18px; color: var(--gold-light); font-family: var(--font-body); letter-spacing: 0.5px;">GM-PAY-000000</strong>
+                    <span style="display: block; font-size: 10px; color: var(--text-muted); margin-top: 4px;">Include this reference number in transfer details if supported.</span>
+                </div>
+
+                <!-- Step A: Select Method & Show Instructions -->
+                <div class="form-group">
+                    <label class="form-label">Payment Method</label>
+                    <select id="payment-method-select" class="form-control" required style="margin-bottom: 16px;">
+                        <option value="airtel_money">Airtel Money (Transfer)</option>
+                        <option value="tnm_mpamba">TNM Mpamba (Transfer)</option>
+                        <option value="bank_transfer">National Bank (Transfer)</option>
+                        <option value="visa">Visa / MasterCard (Card)</option>
+                    </select>
+
+                    <!-- Instruction Card -->
+                    <div id="method-instruction-box" style="background: rgba(0,0,0,0.3); border-radius: var(--radius-md); border: 1px dashed var(--gold-translucent); padding: 16px; font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 24px;">
+                        <!-- Updated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Alert Feedback Panel -->
+                <div id="billing-alert" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 20px; text-align: center;"></div>
+
+                <!-- Step B: Upload Proof Form -->
+                <form id="proof-submission-form">
+                    <div class="form-group">
+                        <label class="form-label">Proof of Payment Document / Receipt</label>
+                        <input type="file" id="billing-proof-file" class="form-control" accept="image/jpeg,image/png,application/pdf" required>
+                        <span style="display: block; font-size: 11px; color: var(--text-muted); margin-top: 6px;">Upload a screenshot of the SMS/receipt, or a transfer PDF invoice. Max 10MB.</span>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">Submit Proof of Payment</button>
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Platform Footer -->
+    <footer style="text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gold-translucent); margin-top: auto;">
+        &copy; 2026 Genius Malawi. Premium status is activated upon confirmation of payment.
+    </footer>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/payments.js"></script>
+</body>
+</html>

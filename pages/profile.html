@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Genius Malawi</title>
+    <meta name="description" content="View and manage your Genius Malawi corporate credentials, referral commissions, session settings, and security audits.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         1. ANIMATED SPLASH SCREEN / LOADER
+         ========================================== -->
+    <div id="profile-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="My Account Loading" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CORE NAVIGATION BAR
+         ========================================== -->
+    <header class="luxury-card" style="border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 16px 24px; z-index: 10;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="../index.html">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo" style="height: 40px; width: auto;">
+                </a>
+                <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--gold-translucent); padding-left: 16px;">Account Hub Workspace</span>
+            </div>
+            <a href="../index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">Back to Home</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. WORKSPACE CONTAINER (PROFILE SHEETS)
+         ========================================== -->
+    <main class="container" style="flex: 1; padding-top: 40px; padding-bottom: 80px;">
+        
+        <!-- Alert Box Feedback -->
+        <div id="profile-alert" style="display: none; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-bottom: 24px; text-align: center;"></div>
+
+        <!-- Cover & Avatar Banner Layout -->
+        <section class="luxury-card" style="padding: 0; overflow: hidden; margin-bottom: 32px;">
+            <div style="position: relative; aspect-ratio: 21/6; background: #000;">
+                <!-- Cover Image -->
+                <img id="profile-cover-img" src="../assets/Logo.png" alt="" style="width: 100%; height: 100%; object-fit: cover; opacity: 0.5;">
+                <label for="cover-uploader" style="position: absolute; top: 20px; right: 20px; padding: 8px 16px; font-size: 11px; cursor: pointer; background: rgba(0,0,0,0.6); border: var(--glass-border); border-radius: var(--radius-sm); color: var(--text-primary);">Change Cover</label>
+                <input type="file" id="cover-uploader" style="display: none;" accept="image/jpeg,image/png,image/webp">
+                
+                <!-- Avatar Circular Block -->
+                <div style="position: absolute; bottom: -40px; left: 40px; display: flex; align-items: flex-end; gap: 16px;">
+                    <div style="position: relative; width: 100px; height: 100px; border-radius: 50%; background: #111; border: 3px solid var(--gold-base); overflow: hidden;">
+                        <img id="profile-avatar-img" src="../assets/Icon.png" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                        <label for="avatar-uploader" style="position: absolute; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 9px; padding: 4px 0; background: rgba(0,0,0,0.75); color: var(--text-primary); cursor: pointer;">Upload</label>
+                        <input type="file" id="avatar-uploader" style="display: none;" accept="image/jpeg,image/png,image/webp">
+                    </div>
+                    <div style="margin-bottom: 48px; text-shadow: 0 2px 10px rgba(0,0,0,0.9);">
+                        <h1 id="header-fullname" style="font-size: 24px; color: var(--text-primary); margin-bottom: 4px;">My Profile</h1>
+                        <span id="header-role-badge"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="padding: 60px 40px 24px; border-top: 1px solid var(--gold-translucent); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block;">Genius ID Registry</span>
+                    <strong id="header-genius-id" style="font-size: 18px; color: var(--gold-light); font-family: var(--font-body); letter-spacing: 0.5px;">GM00000000</strong>
+                </div>
+                <div>
+                    <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; display: block; margin-bottom: 4px;">Referral Invitation Code</span>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="referral-code-display" class="form-control" style="font-size: 12px; padding: 6px 12px; width: 120px; font-weight: bold; border-color: var(--gold-translucent);" readonly>
+                        <button id="copy-ref-code-btn" class="btn-primary" style="padding: 6px 12px; font-size: 11px;">Copy Link</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Information Fields Form & Session Grid -->
+        <div class="grid grid-cols-3" style="gap: 32px; align-items: flex-start;">
+            
+            <!-- Information Editors Form (Left & Center Columns) -->
+            <section class="luxury-card" style="grid-column: span 2; padding: 40px 32px;">
+                <h2 class="gold-text-gradient" style="font-size: 20px; margin-bottom: 24px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 10px;">Identity Parameters</h2>
+                
+                <form id="profile-update-form">
+                    
+                    <div class="grid grid-cols-2" style="gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" id="profile-fullname" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" id="profile-username" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2" style="gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Email Address (Read-only)</label>
+                            <input type="email" id="profile-email" class="form-control" readonly style="background: rgba(255,255,255,0.01); border-color: rgba(255,255,255,0.05); color: var(--text-muted);">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Malawi Phone Number</label>
+                            <input type="tel" id="profile-phone" class="form-control" placeholder="+265...">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2" style="gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" id="profile-dob" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">District Location</label>
+                            <select id="profile-district" class="form-control">
+                                <option value="">Select District</option>
+                                <option value="Balaka">Balaka</option>
+                                <option value="Blantyre">Blantyre</option>
+                                <option value="Chikwawa">Chikwawa</option>
+                                <option value="Chiradzulu">Chiradzulu</option>
+                                <option value="Chitipa">Chitipa</option>
+                                <option value="Dedza">Dedza</option>
+                                <option value="Dowa">Dowa</option>
+                                <option value="Karonga">Chitipa</option>
+                                <option value="Kasungu">Kasungu</option>
+                                <option value="Likoma">Likoma</option>
+                                <option value="Lilongwe">Lilongwe</option>
+                                <option value="Machinga">Machinga</option>
+                                <option value="Mangochi">Mangochi</option>
+                                <option value="Mchinji">Mchinji</option>
+                                <option value="Mulanje">Mulanje</option>
+                                <option value="Mwanza">Mwanza</option>
+                                <option value="Mzimba">Mzimba</option>
+                                <option value="Neno">Mwanza</option>
+                                <option value="Nkhata Bay">Nkhata Bay</option>
+                                <option value="Nkhotakota">Nkhotakota</option>
+                                <option value="Nsanje">Nsanje</option>
+                                <option value="Ntcheu">Ntcheu</option>
+                                <option value="Ntchisi">Ntchisi</option>
+                                <option value="Phalombe">Phalombe</option>
+                                <option value="Rumphi">Rumphi</option>
+                                <option value="Salima">Salima</option>
+                                <option value="Thyolo">Mulanje</option>
+                                <option value="Zomba">Zomba</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2" style="gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label">Occupation</label>
+                            <input type="text" id="profile-occupation" class="form-control" placeholder="E.g., Senior Systems Analyst">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Highest Education</label>
+                            <input type="text" id="profile-education" class="form-control" placeholder="E.g., Bachelor of Science in ICT">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Professional Summary / Bio</label>
+                        <textarea id="profile-bio" class="form-control" rows="4" placeholder="Share a brief overview of your professional profile or enterprise focus..." style="resize: none; font-family: var(--font-body);"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">Save Identity Credentials</button>
+                </form>
+            </section>
+
+            <!-- Security Log & Remote Sessions Panel (Right Column) -->
+            <aside style="display: flex; flex-direction: column; gap: 32px;">
+                
+                <!-- Active Devices Block -->
+                <section class="luxury-card" style="border-color: rgba(212,175,55,0.15);">
+                    <h2 style="font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 10px;">Device Session Logs</h2>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 16px;" id="sessions-viewport">
+                        <!-- Populated dynamically via profile.js -->
+                        <div style="background: rgba(255,255,255,0.01); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: var(--radius-sm);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <strong style="font-size: 13px; color: var(--text-primary);">Current Device</strong>
+                                <span class="badge badge-verified" style="font-size: 9px; padding: 2px 6px;">Active</span>
+                            </div>
+                            <span style="display: block; font-size: 11px; color: var(--text-muted);">Secure Browser Instance &bull; Malawi</span>
+                        </div>
+                    </div>
+
+                    <!-- Remote session termination trigger -->
+                    <button id="remote-logout-btn" class="btn-secondary" style="width: 100%; border-color: var(--heritage-red); color: var(--text-primary); font-size: 12px; margin-top: 16px; padding: 10px; text-transform: none;">Remote Log Out All Other Devices</button>
+                </section>
+
+                <!-- Accounts Safety Block -->
+                <section class="luxury-card" style="border-color: rgba(226, 28, 38, 0.25);">
+                    <h2 style="font-size: 16px; margin-bottom: 20px; border-bottom: 1px solid rgba(226, 28, 38, 0.2); padding-bottom: 10px; color: var(--heritage-red);">Workspace Destruct</h2>
+                    
+                    <p style="font-size: 12px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">Deleting your profile puts your platform assets on a 30-day recovery soft hold. Deleted history remains archived anonymously.</p>
+                    <button id="delete-account-btn" class="btn-secondary" style="width: 100%; background: var(--heritage-red); border: none; color: #fff; font-size: 12px; padding: 10px; text-transform: none; box-shadow: none;">Deactivate Platform Profile</button>
+                </section>
+
+            </aside>
+            
+        </div>
+    </main>
+
+    <!-- Platform Footer -->
+    <footer style="text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gold-translucent); margin-top: auto;">
+        &copy; 2026 Genius Malawi. Profile security parameters protected by direct encryption protocols.
+    </footer>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/profile.js"></script>
+</body>
+</html>

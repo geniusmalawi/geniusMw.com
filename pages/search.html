@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Search - Genius Malawi</title>
+    <meta name="description" content="One search bar searches everything. Find matching career openings, products, corporate listings, news broadcasts, and educational books.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         1. ANIMATED SPLASH SCREEN / LOADER
+         ========================================== -->
+    <div id="search-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Search Engine Loading" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CORE NAVIGATION BAR
+         ========================================== -->
+    <header class="luxury-card" style="border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 16px 24px; z-index: 10;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="../index.html">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo" style="height: 40px; width: auto;">
+                </a>
+                <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--gold-translucent); padding-left: 16px;">Universal Search Engine</span>
+            </div>
+            <a href="../index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. DYNAMIC SEARCH COMPARTMENTS
+         ========================================== -->
+    <main class="container" style="flex: 1; padding-top: 40px; padding-bottom: 80px;">
+        
+        <!-- Main Search bar overlay -->
+        <section class="luxury-card" style="margin-bottom: 40px; padding: 24px;">
+            <form id="active-search-form" style="display: flex; gap: 12px; align-items: center;">
+                <input type="text" id="active-search-input" class="form-control" placeholder="Search across all platform modules..." required>
+                <button type="submit" class="btn-primary" style="padding: 12px 24px;">Search</button>
+            </form>
+            <div style="margin-top: 12px; font-size: 13px; color: var(--text-muted);">
+                Searching for: <strong class="gold-text-gradient" id="search-query-indicator">-</strong>
+            </div>
+        </section>
+
+        <!-- Category Grid Sections -->
+        <div class="grid grid-cols-2" style="gap: 32px; align-items: flex-start;">
+            
+            <!-- Category: Msofi AI Suggestions -->
+            <section class="luxury-card" style="border-color: var(--gold-base); grid-column: span 2;">
+                <h3 style="font-size: 16px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Msofi AI Suggestions</span>
+                    <span class="badge badge-premium">AI Analysis</span>
+                </h3>
+                <div id="results-ai-suggestion" style="font-size: 14px; color: var(--text-secondary); line-height: 1.6;">
+                    Msofi is processing your search parameters...
+                </div>
+            </section>
+
+            <!-- Category: Career Opportunities -->
+            <section class="luxury-card">
+                <h3 style="font-size: 16px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 8px; margin-bottom: 16px;">Matching Careers & Jobs</h3>
+                <div id="results-jobs" style="display: flex; flex-direction: column; gap: 12px;">
+                    <p style="font-size: 13px; color: var(--text-muted);">Searching career index...</p>
+                </div>
+            </section>
+
+            <!-- Category: Broadcast News -->
+            <section class="luxury-card">
+                <h3 style="font-size: 16px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 8px; margin-bottom: 16px;">Matching News Broadcasts</h3>
+                <div id="results-news" style="display: flex; flex-direction: column; gap: 12px;">
+                    <p style="font-size: 13px; color: var(--text-muted);">Searching broadcast databases...</p>
+                </div>
+            </section>
+
+            <!-- Category: Educational Books (Redirection Link Indicators) -->
+            <section class="luxury-card" style="grid-column: span 2;">
+                <h3 style="font-size: 16px; border-bottom: 1px solid var(--gold-translucent); padding-bottom: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Educational Resources & Books (MEBV Platform)</span>
+                    <span class="badge badge-verified">Redirects</span>
+                </h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; line-height: 1.6;">
+                    Platform books are hosted securely on the official MEBV Education Platform. Select the matching category link below to browse the external library seamlessly.
+                </p>
+                <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                    <a href="https://mebv-education-app-mw-malawi.pages.dev/" target="_blank" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">Browse Primary Syllabus</a>
+                    <a href="https://mebv-education-app-mw-malawi.pages.dev/" target="_blank" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">Browse Secondary Syllabus</a>
+                    <a href="https://mebv-education-app-mw-malawi.pages.dev/" target="_blank" class="btn-secondary" style="font-size: 12px; padding: 8px 16px;">Browse Higher Education Resources</a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Platform Footer -->
+    <footer style="text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gold-translucent); margin-top: auto;">
+        &copy; 2026 Genius Malawi. Universal search matches queries across decentralized secure database indexes.
+    </footer>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/search.js"></script>
+</body>
+</html>

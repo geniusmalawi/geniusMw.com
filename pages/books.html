@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" data-accessibility="default" data-font-size="medium">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books & Education - Genius Malawi</title>
+    <meta name="description" content="Access Malawi's flagship digital school library. Search, browse, and read academic textbooks, teacher guides, and syllabus resources seamlessly.">
+    
+    <!-- Favicon Links -->
+    <link rel="icon" type="image/png" href="../assets/Icon.png">
+    <link rel="apple-touch-icon" href="../assets/Icon.png">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+    <!-- ==========================================
+         1. ANIMATED SPLASH SCREEN / LOADER
+         ========================================== -->
+    <div id="books-splash" class="splash-screen">
+        <div class="splash-logo-container">
+            <img src="../assets/Logo.png" alt="Education Library Loading" class="splash-logo">
+        </div>
+        <div class="splash-loader"></div>
+    </div>
+
+    <!-- ==========================================
+         2. CORE NAVIGATION BAR
+         ========================================== -->
+    <header class="luxury-card" style="border-radius: 0; border-top: none; border-left: none; border-right: none; padding: 16px 24px; z-index: 10;">
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="../index.html">
+                    <img src="../assets/Logo.png" alt="Genius Malawi Logo" style="height: 40px; width: auto;">
+                </a>
+                <span style="font-size: 14px; color: var(--text-muted); border-left: 1px solid var(--gold-translucent); padding-left: 16px;">MEBV Digital Education Library</span>
+            </div>
+            <a href="../index.html" class="btn-secondary" style="padding: 10px 20px; font-size: 13px;">Back to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         3. DYNAMIC EDUCATION DASHBOARD
+         ========================================== -->
+    <main class="container" style="flex: 1; padding-top: 40px; padding-bottom: 80px;">
+        
+        <!-- Welcome Banner Gateway -->
+        <section class="luxury-card" style="margin-bottom: 40px; text-align: center; padding: 48px 32px; border-color: var(--gold-base);">
+            <h1 class="gold-text-gradient" style="font-size: 28px; margin-bottom: 12px;">Flagship Books Portal</h1>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; max-width: 650px; margin: 0 auto 24px;">
+                Welcome to the digital reading library. In partnership with the official **MEBV Education Platform**, we provide full curriculum guides, past examination questions, and student textbooks directly within your Genius Malawi account workspace.
+            </p>
+            <button id="launch-library-btn" class="btn-primary" style="padding: 12px 28px;">Launch Full MEBV Library</button>
+        </section>
+
+        <!-- Category Grid Directory (As attractive navigation cards) -->
+        <section style="margin-bottom: 48px;">
+            <h2 style="font-size: 18px; border-left: 4px solid var(--gold-base); padding-left: 12px; margin-bottom: 24px;">Browse Syllabus Divisions</h2>
+            
+            <div class="grid grid-cols-3" style="gap: 24px;">
+                
+                <!-- Category 1 -->
+                <div class="luxury-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 16px;">🎒</div>
+                        <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-primary);">Primary School Syllabus</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">Textbooks and resources mapped directly to the Malawi National Primary School Curriculum standards.</p>
+                    </div>
+                    <button class="btn-secondary" style="width: 100%; padding: 10px; font-size: 12px;" onclick="window.location.href='https://mebv-education-app-mw-malawi.pages.dev/';">Browse Primary Books</button>
+                </div>
+
+                <!-- Category 2 -->
+                <div class="luxury-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 16px;">📐</div>
+                        <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-primary);">Secondary School Syllabus</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">MSCE textbook bundles, past papers, and study materials covering all sciences and humanities.</p>
+                    </div>
+                    <button class="btn-secondary" style="width: 100%; padding: 10px; font-size: 12px;" onclick="window.location.href='https://mebv-education-app-mw-malawi.pages.dev/';">Browse Secondary Books</button>
+                </div>
+
+                <!-- Category 3 -->
+                <div class="luxury-card" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                    <div>
+                        <div style="font-size: 32px; margin-bottom: 16px;">🏫</div>
+                        <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-primary);">Tertiary & Higher Education</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px;">University textbook indexes, research documents, and specialized technical blueprints.</p>
+                    </div>
+                    <button class="btn-secondary" style="width: 100%; padding: 10px; font-size: 12px;" onclick="window.location.href='https://mebv-education-app-mw-malawi.pages.dev/';">Browse Higher Ed Books</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dynamic Featured Books Showcase Panel -->
+        <section>
+            <h2 style="font-size: 18px; border-left: 4px solid var(--gold-base); padding-left: 12px; margin-bottom: 24px;">Recently Added Resources</h2>
+            <div id="featured-books-grid" class="grid grid-cols-4" style="gap: 20px;">
+                <!-- Populated dynamically via books.js controller -->
+                <p style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 40px;">Querying educational databases...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Platform Footer -->
+    <footer style="text-align: center; padding: 24px; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gold-translucent); margin-top: auto;">
+        &copy; 2026 Genius Malawi. All books are sourced, managed, and verified by the official MEBV Education Platform.
+    </footer>
+
+    <!-- Script Import -->
+    <script type="module" src="../js/books.js"></script>
+    <script type="module" src="../js/advertising.js"></script>
+</body>
+</html>

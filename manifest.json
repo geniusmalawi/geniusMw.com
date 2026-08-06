@@ -1,0 +1,40 @@
+{
+    "name": "Genius Malawi",
+    "short_name": "GeniusMW",
+    "description": "Professional Digital Super Platform for Malawi. Connecting Malawi. Empowering Every Dream.",
+    "start_url": "/index.html",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#050505",
+    "theme_color": "#d4af37",
+    "dir": "ltr",
+    "lang": "en-US",
+    "categories": [
+        "productivity",
+        "business",
+        "utilities",
+        "education",
+        "social"
+    ],
+    "icons": [
+        {
+            "src": "assets/Icon.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/Icon.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "assets/Logo.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}
