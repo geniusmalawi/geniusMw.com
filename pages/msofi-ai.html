@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon" href="../assets/Icon.png?v=2">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="../css/style.css?v=2.0.2">
+    <link rel="stylesheet" href="../css/style.css?v=2.0.4">
 </head>
 <body class="msofi-ai-page">
 
@@ -55,8 +55,14 @@
             </div>
 
             <div class="msofi-topbar-right">
-                <button type="button" id="msofi-topbar-upgrade-btn" class="btn-secondary msofi-topbar-button">Upgrade</button>
-                <button type="button" id="msofi-share-btn" class="btn-secondary msofi-topbar-button">Share</button>
+                <button type="button" id="msofi-topbar-upgrade-btn" class="btn-secondary msofi-topbar-button" aria-label="Upgrade plan">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.4 5.2 5.6.4-4.4 3.7 1.4 5.4L12 15.8 7 17.7l1.4-5.4L4 8.6l5.6-.4L12 3Z" /></svg>
+                    <span>Upgrade</span>
+                </button>
+                <button type="button" id="msofi-share-btn" class="btn-secondary msofi-topbar-button" aria-label="Share conversation">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6a3 3 0 1 0-2.83 3.99l-3.94 2.5A3 3 0 1 0 6 14a3 3 0 0 0 1.3-.29l3.8-2.42A3 3 0 0 0 15 18a3 3 0 1 0 0-6 3 3 0 0 0-1.3.29L9.9 10.2A3 3 0 0 0 9.9 10.2L15 6Z" /></svg>
+                    <span>Share</span>
+                </button>
                 <div class="msofi-topbar-menu-wrap">
                     <button type="button" id="msofi-topbar-menu-btn" class="msofi-topbar-menu-btn" aria-label="Open Msofi options">⋯</button>
                     <div id="msofi-topbar-menu" class="msofi-topbar-menu" hidden>
@@ -80,7 +86,7 @@
     <div class="msofi-workspace-shell" style="flex: 1 1 auto; display: flex; overflow: hidden; position: relative; min-height: 0;">
         <div id="msofi-sidebar-backdrop" class="msofi-sidebar-backdrop" hidden></div>
         <!-- Sidebar: Conversation History & Mode Configs -->
-        <aside class="luxury-card msofi-sidebar-panel" style="width: min(320px, 32vw); border-radius: 0; border-top: none; border-bottom: none; border-left: none; display: flex; flex-direction: column; padding: 20px 16px; z-index: 5;">
+        <aside class="luxury-card msofi-sidebar-panel" style="width: min(320px, 32vw); border-radius: 0; border-top: none; border-bottom: none; border-left: none; display: flex; flex-direction: column; padding: 20px 16px;">
 
             <div class="msofi-sidebar-header">
                 <div class="msofi-sidebar-brand">
@@ -163,28 +169,35 @@
 
             <!-- File Upload & Typing Toolbar Panel -->
             <div class="msofi-composer-panel luxury-card" style="border-radius: 0; border-bottom: none; border-left: none; border-right: none; padding: 16px 24px; flex-shrink: 0;">
-                
-                <!-- Attachment/Upload status tracker -->
                 <div id="attachment-preview-box" style="display: none; align-items: center; justify-content: space-between; padding: 8px 16px; margin-bottom: 12px; background: #ffffff; border-radius: var(--radius-sm); border: 1px solid rgba(0,0,0,0.16);">
                     <span id="attachment-name" style="font-size: 13px; color: var(--text-primary); font-weight: 500;">document.pdf</span>
                     <button id="cancel-attachment-btn" style="background: none; border: none; color: #000; cursor: pointer; font-size: 13px;">Remove</button>
                 </div>
 
-                <form id="chat-input-form" style="display: flex; gap: 12px; align-items: center;">
-                    <!-- Upload trigger (PDF, DOCX, etc.) -->
-                    <label id="attachment-menu-trigger" for="ai-file-uploader" class="msofi-composer-icon-button" aria-label="Upload document" role="button" tabindex="0">
-                        <span>＋</span>
-                    </label>
-                    <input type="file" id="ai-file-uploader" style="display: none;" accept=".pdf,.docx,.pptx,.xlsx">
+                <form id="chat-input-form" class="msofi-chat-composer-form">
+                    <div class="msofi-chat-composer-shell">
+                        <label id="attachment-menu-trigger" for="ai-file-uploader" class="msofi-composer-icon-button" aria-label="Upload document" role="button" tabindex="0">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 4a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2h-6v6a1 1 0 1 1-2 0v-6H5a1 1 0 1 1 0-2h6V5a1 1 0 0 1 1-1Z" />
+                            </svg>
+                        </label>
+                        <input type="file" id="ai-file-uploader" style="display: none;" accept=".pdf,.docx,.pptx,.xlsx">
 
-                    <!-- Chat Text Inputs -->
-                    <input type="text" id="chat-text-input" class="form-control" placeholder="Ask Msofi anything..." style="flex: 1; border-color: rgba(0,0,0,0.22);" autocomplete="off" required>
+                        <textarea id="chat-text-input" class="msofi-chat-textarea" rows="1" placeholder="Type a message..." autocomplete="off" spellcheck="true"></textarea>
 
-                    <!-- Voice Input Button (Ready) -->
-                    <button type="button" id="voice-input-btn" class="btn-secondary" style="padding: 12px 18px;" aria-label="Record speech input">Voice</button>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn-primary" style="padding: 12px 24px;">Send</button>
+                        <div class="msofi-composer-actions">
+                            <button type="button" id="voice-input-btn" class="msofi-composer-icon-button" aria-label="Record speech input">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm-5 1.5V16a5 5 0 0 0 10 0v-0.5a1 1 0 1 1 2 0V16a7 7 0 0 1-6 6.93A7 7 0 0 1 5 16v-0.5a1 1 0 1 1 2 0Z" />
+                                </svg>
+                            </button>
+                            <button type="submit" class="msofi-composer-send-btn" data-action="send" aria-label="Send message" disabled>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M4.4 4.4a1.2 1.2 0 0 1 1.47-.14l14 8a1.2 1.2 0 0 1 0 2.14l-14 8a1.2 1.2 0 0 1-1.74-1.28L5.9 12 1.2 2.4a.7.7 0 0 1-.06.7L4.4 4.4Z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </form>
             </div>
 
@@ -197,6 +210,6 @@
     <div id="msofi-modal-overlay" class="msofi-modal-overlay" hidden></div>
 
     <!-- Script Import -->
-    <script type="module" src="../js/msofi-ai.js?v=2.0.2"></script>
+    <script type="module" src="../js/msofi-ai.js?v=2.0.4"></script>
 </body>
 </html>

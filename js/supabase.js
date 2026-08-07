@@ -10,6 +10,11 @@
 import { ENV } from './env.js';
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
+const DEBUG = false;
+const debugLog = (...args) => {
+    if (DEBUG) console.log(...args);
+};
+
 // Retrieve credentials strictly from the imported global configuration object
 const SUPABASE_URL = ENV?.SUPABASE_URL;
 const SUPABASE_ANON_KEY = ENV?.SUPABASE_ANON_KEY;
@@ -210,16 +215,21 @@ function resolveBucketName(bucketName, uploadType) {
 
 export const storageAPI = {
     /**
-     * Securely uploads checked file assets directly to Supabase storage buckets.
+     * Securely uploads validated file assets directly to Supabase storage buckets.
      * @param {File} file - Validated file.
      * @param {string} bucketName - Target bucket ('avatars', 'marketplace', 'businesses', 'payments', 'documents').
      * @param {string} uploadType - Rules mapping type.
-     * @returns {Promise<string>} Public edge URL of resource.
+     * @param {object} options - Optional upload configuration.
+     * @param {boolean} options.fullResponse - When true, returns full metadata; otherwise returns the public URL string.
+     * @param {function} options.onProgress - Optional progress callback.
+     * @returns {Promise<string|object>} Public URL string by default, or metadata object when fullResponse is true.
      */
-    async uploadFile(file, bucketName, uploadType) {
-        console.log('Uploading News Image...');
-        console.log('Bucket:', bucketName);
-        console.log('Classification:', uploadType);
+    async uploadFile(file, bucketName, uploadType, options = {}) {
+        const { fullResponse = false, onProgress } = options;
+
+        debugLog('Uploading file...');
+        debugLog('Bucket:', bucketName);
+        debugLog('Classification:', uploadType);
 
         // Enforce script-level guardrail before execution
         const validation = validateFile(file, uploadType);
@@ -232,8 +242,12 @@ export const storageAPI = {
         const fileExt = file.name.split('.').pop();
         const secureFileName = `${session.user.id}/${Date.now()}_${crypto.randomUUID()}.${fileExt}`;
         const resolvedBucketName = resolveBucketName(bucketName, uploadType);
-        console.log('Upload Path:', secureFileName);
-        console.log('Resolved bucket:', resolvedBucketName);
+        debugLog('Upload Path:', secureFileName);
+        debugLog('Resolved bucket:', resolvedBucketName);
+
+        if (typeof onProgress === 'function') {
+            onProgress({ state: 'started', loaded: 0, total: file.size, percent: 0 });
+        }
 
         const { data, error } = await supabase.storage
             .from(resolvedBucketName)
@@ -247,19 +261,23 @@ export const storageAPI = {
             throw error;
         }
 
-        // Obtain dynamic resource address mapping
         const { data: { publicUrl } } = supabase.storage
             .from(resolvedBucketName)
             .getPublicUrl(data.path);
 
-        console.log('Upload Success');
-        console.log('Upload Path:', data.path);
-        console.log('Upload URL:', publicUrl);
-        console.log('Upload Bucket:', resolvedBucketName);
+        if (typeof onProgress === 'function') {
+            onProgress({ state: 'completed', loaded: file.size, total: file.size, percent: 100 });
+        }
 
-        // Return both the public URL and the internal storage path for deletion later
-        return { publicUrl, path: data.path, bucket: resolvedBucketName };
+        debugLog('Upload Success');
+        debugLog('Upload Path:', data.path);
+        debugLog('Upload URL:', publicUrl);
+        debugLog('Upload Bucket:', resolvedBucketName);
+
+        const response = { publicUrl, path: data.path, bucket: resolvedBucketName };
+        return fullResponse ? response : publicUrl;
     },
+
 
     /**
      * Remove a file from storage by bucket and path
@@ -274,3 +292,60 @@ export const storageAPI = {
         return true;
     }
 };
+
+const PROFILE_UPDATE_STORAGE_KEY = 'genius_malawi_profile_update';
+
+/**
+ * Broadcasts a lightweight profile payload to other windows/tabs.
+ * @param {object} payload - Profile fields that changed.
+ */
+export function publishProfileUpdate(payload = {}) {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+
+    const envelope = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        timestamp: Date.now(),
+        payload
+    };
+
+    try {
+        window.localStorage.setItem(PROFILE_UPDATE_STORAGE_KEY, JSON.stringify(envelope));
+        window.dispatchEvent(new CustomEvent('profile-update', { detail: envelope }));
+    } catch (err) {
+        console.warn('Failed to publish profile update event:', err);
+    }
+}
+
+/**
+ * Subscribes to profile update broadcasts from other tabs or local events.
+ * @param {function(object):void} callback
+ * @returns {function():void} unsubscribe handler
+ */
+export function subscribeToProfileUpdates(callback) {
+    if (typeof window === 'undefined') return () => {};
+
+    const listener = (event) => {
+        let payload = null;
+        if (event.type === 'storage' && event.key === PROFILE_UPDATE_STORAGE_KEY && event.newValue) {
+            try {
+                const envelope = JSON.parse(event.newValue);
+                payload = envelope?.payload || null;
+            } catch (err) {
+                console.warn('Unable to parse profile update storage event payload:', err);
+            }
+        } else if (event.type === 'profile-update' && event.detail) {
+            payload = event.detail.payload || null;
+        }
+
+        if (!payload) return;
+        callback(payload);
+    };
+
+    window.addEventListener('storage', listener);
+    window.addEventListener('profile-update', listener);
+
+    return () => {
+        window.removeEventListener('storage', listener);
+        window.removeEventListener('profile-update', listener);
+    };
+}

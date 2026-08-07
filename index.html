@@ -13,11 +13,11 @@
     <link rel="manifest" href="manifest.json">
 
     <!-- Favicon Links -->
-    <link rel="icon" type="image/png" href="assets/Icon.png?v=2">
-    <link rel="apple-touch-icon" href="assets/Icon.png?v=2">
+    <link rel="icon" type="image/png" href="assets/Icon.png?v=2026.1.0">
+    <link rel="apple-touch-icon" href="assets/Icon.png?v=2026.1.0">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/style.css?v=2.0.3">
+    <link rel="stylesheet" href="css/style.css?v=2026.1.0">
 </head>
 <body>
 
@@ -82,8 +82,17 @@
             <form id="universal-search-form" style="max-width: 800px; margin: 0 auto; position: relative;">
                 <div style="display: flex; gap: 12px; background: rgba(0,0,0,0.4); padding: 8px; border-radius: var(--radius-md); border: var(--glass-border);">
                     <input type="text" id="search-input" class="form-control" placeholder="Search Jobs, News, Marketplace, Businesses, Videos..." style="border: none; background: transparent;" required>
-                    <button type="button" id="voice-search-btn" class="btn-secondary" style="padding: 10px 16px;" aria-label="Search using voice">Voice</button>
-                    <button type="submit" class="btn-primary" style="padding: 12px 24px;">Search</button>
+                    <button type="button" id="voice-search-btn" class="homepage-icon-button" aria-label="Search using voice" title="Search using voice">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Zm-5 1.5V16a5 5 0 0 0 10 0v-.5a1 1 0 1 1 2 0V16a7 7 0 0 1-6 6.93A7 7 0 0 1 5 16v-.5a1 1 0 1 1 2 0Z" />
+                        </svg>
+                    </button>
+                    <button type="submit" class="homepage-icon-button" aria-label="Search" title="Search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+                            <path d="M16 16L21 21" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                        </svg>
+                    </button>
                 </div>
                 <!-- Dynamic Quick Filter Badges -->
                 <div style="display: flex; justify-content: center; gap: 12px; margin-top: 16px; flex-wrap: wrap;">
@@ -251,8 +260,9 @@
     </footer>
 
     <!-- Scripts -->
-    <script type="module" src="js/app.js?v=2.0.3"></script>
-    <script type="module" src="js/advertising.js?v=2.0.2"></script>
-    <script src="js/pwa-install.js?v=2.0.2"></script>
+    <script type="module" src="js/app.js?v=2026.1.0"></script>
+    <script type="module" src="js/advertising.js?v=2026.1.0"></script>
+    <script src="js/pwa-install.js?v=2026.1.0"></script>
+    <script type="module" src="js/version-check.js?v=2026.1.0"></script>
 </body>
 </html>

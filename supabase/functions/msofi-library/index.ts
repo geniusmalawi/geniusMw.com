@@ -258,15 +258,6 @@ serve(async (req) => {
     const urlConfigured = Boolean(MEBV_SUPABASE_URL);
     const serviceRoleConfigured = Boolean(MEBV_SUPABASE_SERVICE_ROLE_KEY);
 
-    console.log(JSON.stringify({
-      event: 'msofi-library-request',
-      query,
-      category,
-      source: 'mebv_supabase_catalog',
-      urlConfigured,
-      serviceRoleConfigured
-    }));
-
     if (!urlConfigured || !serviceRoleConfigured) {
       return buildJsonResponse({
         success: false,
@@ -279,16 +270,6 @@ serve(async (req) => {
     }
 
     const verification = await verifyBooksTableAccess();
-    console.log(JSON.stringify({
-      event: 'msofi-library-table-verification',
-      connectedProjectUrl: MEBV_SUPABASE_URL,
-      reachedSupabase: verification.reachedSupabase,
-      totalRowsReturned: verification.totalRowsReturned,
-      firstFiveTitles: verification.firstFiveTitles,
-      searchKeyword: query,
-      error: verification.error,
-      reason: verification.reason
-    }));
 
     if (!verification.ok || verification.totalRowsReturned === 0) {
       return buildJsonResponse({
@@ -303,17 +284,6 @@ serve(async (req) => {
     }
 
     const results = await fetchBooksFromCatalog(query);
-
-    console.log(JSON.stringify({
-      event: 'msofi-library-response',
-      searchKeyword: query,
-      connectedProjectUrl: MEBV_SUPABASE_URL,
-      reachedSupabase: verification.reachedSupabase,
-      totalRowsReturned: verification.totalRowsReturned,
-      firstFiveTitles: verification.firstFiveTitles,
-      matchedBooksCount: results.length,
-      matchedBooks: results.map((item) => ({ title: item.title, category: item.category }))
-    }));
 
     return buildJsonResponse({
       success: true,

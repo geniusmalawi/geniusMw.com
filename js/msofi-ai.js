@@ -7,8 +7,13 @@
 // Dependencies: js/supabase.js
 // =====================================================================
 
-import { supabase, authAPI, storageAPI, validateFile } from './supabase.js';
+import { supabase, authAPI, storageAPI, validateFile, subscribeToProfileUpdates } from './supabase.js';
 import { detectLibraryIntent, searchMebvLibrary, renderLibraryResultsHtml, escapeHtml } from './msofi-gateway.js';
+
+const DEBUG = false;
+const debugLog = (...args) => {
+    if (DEBUG) console.log(...args);
+};
 
 // Navigation monitoring via native API overrides was removed to avoid
 // assigning to read-only Location properties in some browsers.
@@ -39,8 +44,9 @@ const SCROLL_BOTTOM_DISTANCE = 160;
 const SCROLL_BUTTON_FADE_DISTANCE = 240;
 
 function logOverlayEvent(action, reason, callingFunction) {
+    if (!DEBUG) return;
     const timestamp = new Date().toISOString();
-    console.log(`[Msofi Overlay] ${action} | Reason: ${reason} | Calling function: ${callingFunction} | Timestamp: ${timestamp}`);
+    debugLog(`[Msofi Overlay] ${action} | Reason: ${reason} | Calling function: ${callingFunction} | Timestamp: ${timestamp}`);
 }
 
 function openModalOverlay(reason, callingFunction) {
@@ -370,10 +376,10 @@ async function upsertProfileRecord(payload, userId = currentUser?.id) {
 }
 
 async function safeBootstrap(moduleName, initFn) {
-    console.log('START:', moduleName);
+    debugLog('START:', moduleName);
     try {
         await initFn();
-        console.log('SUCCESS:', moduleName);
+        debugLog('SUCCESS:', moduleName);
     } catch (err) {
         console.error('FAILED:', moduleName, err);
         console.error(`Failed to initialize ${moduleName}:`, err?.message || err);
@@ -970,10 +976,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     hideModalOverlay('Startup begin', 'DOMContentLoaded');
 
     try {
-        console.log('START:', 'loadUserProfile');
+        debugLog('START:', 'loadUserProfile');
         const session = await authAPI.checkSession(false);
         currentUser = session?.user || null;
-        console.log('SUCCESS:', 'loadUserProfile');
+        debugLog('SUCCESS:', 'loadUserProfile');
     } catch (err) {
         console.error('FAILED:', 'loadUserProfile', err);
         console.warn('Msofi AI session check failed:', err?.message || err);
@@ -981,9 +987,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        console.log('START:', 'loadUserProfile');
+        debugLog('START:', 'loadUserProfile');
         await loadUserProfile();
-        console.log('SUCCESS:', 'loadUserProfile');
+        debugLog('SUCCESS:', 'loadUserProfile');
     } catch (err) {
         console.error('FAILED:', 'loadUserProfile', err);
         console.warn('Profile bootstrap warning:', err?.message || err);
@@ -1000,55 +1006,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        console.log('START:', 'fetchOrInitDailyUsage');
+        debugLog('START:', 'fetchOrInitDailyUsage');
         await fetchOrInitDailyUsage();
-        console.log('SUCCESS:', 'fetchOrInitDailyUsage');
+        debugLog('SUCCESS:', 'fetchOrInitDailyUsage');
     } catch (err) {
         console.error('FAILED:', 'fetchOrInitDailyUsage', err);
         console.warn('Usage bootstrap warning:', err?.message || err);
         currentDailyUsage = { chat_count: 0, pdf_upload_count: 0, image_gen_count: 0 };
     }
 
-    console.log('START:', 'renderLimitTracker');
+    debugLog('START:', 'renderLimitTracker');
     renderLimitTracker();
-    console.log('SUCCESS:', 'renderLimitTracker');
+    debugLog('SUCCESS:', 'renderLimitTracker');
 
     try {
-        console.log('START:', 'setupSidebarNavigation');
+        debugLog('START:', 'setupSidebarNavigation');
         setupSidebarNavigation();
-        console.log('SUCCESS:', 'setupSidebarNavigation');
+        debugLog('SUCCESS:', 'setupSidebarNavigation');
     } catch (err) {
         console.error('FAILED:', 'setupSidebarNavigation', err);
     }
 
     try {
-        console.log('START:', 'setupAccountMenu');
+        debugLog('START:', 'setupAccountMenu');
         setupAccountMenu();
-        console.log('SUCCESS:', 'setupAccountMenu');
+        debugLog('SUCCESS:', 'setupAccountMenu');
     } catch (err) {
         console.error('FAILED:', 'setupAccountMenu', err);
     }
 
     try {
-        console.log('START:', 'setupConversationHistorySearch');
+        debugLog('START:', 'setupConversationHistorySearch');
         setupConversationHistorySearch();
-        console.log('SUCCESS:', 'setupConversationHistorySearch');
+        debugLog('SUCCESS:', 'setupConversationHistorySearch');
     } catch (err) {
         console.error('FAILED:', 'setupConversationHistorySearch', err);
     }
 
     try {
-        console.log('START:', 'setupMessageViewportAutoScroll');
+        debugLog('START:', 'setupMessageViewportAutoScroll');
         setupMessageViewportAutoScroll();
-        console.log('SUCCESS:', 'setupMessageViewportAutoScroll');
+        debugLog('SUCCESS:', 'setupMessageViewportAutoScroll');
     } catch (err) {
         console.error('FAILED:', 'setupMessageViewportAutoScroll', err);
     }
 
     try {
-        console.log('START:', 'setupMessagingSubmission');
+        debugLog('START:', 'setupMessagingSubmission');
         setupMessagingSubmission();
-        console.log('SUCCESS:', 'setupMessagingSubmission');
+        debugLog('SUCCESS:', 'setupMessagingSubmission');
     } catch (err) {
         console.error('FAILED:', 'setupMessagingSubmission', err);
     }
@@ -1064,9 +1070,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     try {
-        console.log('START:', 'loadPersistedConversationHistory');
+        debugLog('START:', 'loadPersistedConversationHistory');
         await loadPersistedConversationHistory();
-        console.log('SUCCESS:', 'loadPersistedConversationHistory');
+        debugLog('SUCCESS:', 'loadPersistedConversationHistory');
         window.requestAnimationFrame(() => scrollViewportToBottom(true));
     } catch (err) {
         console.error('FAILED:', 'loadPersistedConversationHistory', err);
@@ -1116,6 +1122,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await safeBootstrap('conversation search', async () => {
         setupConversationHistorySearch();
+    });
+
+    await safeBootstrap('profile sync updates', async () => {
+        subscribeToProfileUpdates((payload) => {
+            if (!payload) return;
+            if (payload.profile_photo) {
+                userProfile = userProfile ? { ...userProfile, profile_photo: payload.profile_photo } : { profile_photo: payload.profile_photo };
+                refreshProfileUI();
+            }
+        });
     });
 
     hideModalOverlay('Initialization complete', 'DOMContentLoaded');
@@ -1562,9 +1578,53 @@ function setupTopbarControls() {
     const sidebarToggleBtn = document.getElementById('msofi-sidebar-toggle-btn');
     const sidebarBackdrop = document.getElementById('msofi-sidebar-backdrop');
     const sidebarPanel = document.querySelector('.msofi-sidebar-panel');
+    let closeMobileSidebar = () => {};
+
+    const syncSidebarState = (isOpen) => {
+        if (!sidebarPanel) return;
+
+        if (isOpen) {
+            sidebarPanel.classList.remove('collapsed');
+            sidebarPanel.classList.add('mobile-open');
+            document.body.classList.add('mobile-sidebar-open');
+            if (window.innerWidth <= 1024) {
+                window.requestAnimationFrame(() => {
+                    sidebarPanel.style.display = 'flex';
+                    sidebarPanel.style.transform = 'translateX(0)';
+                    sidebarPanel.style.opacity = '1';
+                    sidebarPanel.style.visibility = 'visible';
+                    sidebarPanel.style.pointerEvents = 'auto';
+                });
+            } else {
+                sidebarPanel.style.display = '';
+                sidebarPanel.style.transform = '';
+                sidebarPanel.style.opacity = '';
+                sidebarPanel.style.visibility = '';
+                sidebarPanel.style.pointerEvents = '';
+            }
+        } else {
+            sidebarPanel.classList.remove('mobile-open');
+            document.body.classList.remove('mobile-sidebar-open');
+            if (window.innerWidth <= 1024) {
+                window.requestAnimationFrame(() => {
+                    sidebarPanel.style.display = 'none';
+                    sidebarPanel.style.transform = 'translateX(-110%)';
+                    sidebarPanel.style.opacity = '0';
+                    sidebarPanel.style.visibility = 'hidden';
+                    sidebarPanel.style.pointerEvents = 'none';
+                });
+            } else {
+                sidebarPanel.style.display = '';
+                sidebarPanel.style.transform = '';
+                sidebarPanel.style.opacity = '';
+                sidebarPanel.style.visibility = '';
+                sidebarPanel.style.pointerEvents = '';
+            }
+        }
+    };
 
     const closeSidebar = () => {
-        if (sidebarPanel) sidebarPanel.classList.remove('mobile-open');
+        syncSidebarState(false);
         if (sidebarBackdrop) {
             sidebarBackdrop.classList.remove('visible');
             sidebarBackdrop.hidden = true;
@@ -1572,8 +1632,11 @@ function setupTopbarControls() {
         if (sidebarToggleBtn) sidebarToggleBtn.setAttribute('aria-expanded', 'false');
     };
 
+    closeMobileSidebar = closeSidebar;
+    window.closeMsofiMobileSidebar = closeSidebar;
+
     const openSidebar = () => {
-        if (sidebarPanel) sidebarPanel.classList.add('mobile-open');
+        syncSidebarState(true);
         if (sidebarBackdrop) {
             sidebarBackdrop.classList.add('visible');
             sidebarBackdrop.hidden = false;
@@ -1596,19 +1659,23 @@ function setupTopbarControls() {
     });
 
     window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1024) {
             closeSidebar();
+        } else {
+            sidebarPanel?.classList.remove('collapsed');
         }
     });
 
     window.addEventListener('orientationchange', () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1024) {
             closeSidebar();
+        } else {
+            sidebarPanel?.classList.remove('collapsed');
         }
     });
 
     document.addEventListener('fullscreenchange', () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 1024) {
             closeSidebar();
         }
     });
@@ -1866,6 +1933,11 @@ function setupChatLifecycle() {
 
 function setupSidebarNavigation() {
     const sidebar = document.querySelector('.msofi-sidebar-panel');
+    const closeDrawerOnSelection = () => {
+        if (window.innerWidth <= 1024) {
+            window.closeMsofiMobileSidebar?.();
+        }
+    };
     const collapseBtn = document.getElementById('sidebar-collapse-btn');
     const navButtons = document.querySelectorAll('[data-sidebar-action]');
     const searchInput = document.getElementById('conversation-search-panel-input');
@@ -1873,7 +1945,11 @@ function setupSidebarNavigation() {
 
     if (collapseBtn && sidebar) {
         collapseBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('collapsed');
+            if (window.innerWidth > 1024) {
+                sidebar.classList.toggle('collapsed');
+            } else {
+                window.closeMsofiMobileSidebar?.();
+            }
         });
     }
 
@@ -1882,6 +1958,7 @@ function setupSidebarNavigation() {
         const historySection = document.getElementById('conversation-history-section');
         historySection?.removeAttribute('hidden');
         openConversationSearchPanel();
+        closeDrawerOnSelection();
     });
 
     navButtons.forEach((button) => {
@@ -1891,6 +1968,7 @@ function setupSidebarNavigation() {
                 const historySection = document.getElementById('conversation-history-section');
                 historySection?.removeAttribute('hidden');
                 openConversationSearchPanel();
+                closeDrawerOnSelection();
                 return;
             }
 
@@ -1898,6 +1976,7 @@ function setupSidebarNavigation() {
                 modeSelect.value = 'image';
                 window.changeAIMode();
                 showFeedback({ title: 'Image mode enabled', body: 'Msofi AI is ready for image generation requests.', tone: 'success' });
+                closeDrawerOnSelection();
                 return;
             }
 
@@ -1905,11 +1984,13 @@ function setupSidebarNavigation() {
                 modeSelect.value = 'general';
                 window.changeAIMode();
                 showFeedback({ title: 'Library view ready', body: 'Your workspace is prepared to search the MEBV library when the prompt is clearly a document request.', tone: 'info' });
+                closeDrawerOnSelection();
                 return;
             }
 
             if (action === 'plugins') {
                 showFeedback({ title: 'Plugins workspace', body: 'This workspace is ready for plugin-assisted chat flows.', tone: 'info' });
+                closeDrawerOnSelection();
                 return;
             }
 
@@ -1917,6 +1998,7 @@ function setupSidebarNavigation() {
                 modeSelect.value = 'business';
                 window.changeAIMode();
                 showFeedback({ title: 'Projects mode enabled', body: 'Your conversation context is now aligned for project planning and operations.', tone: 'success' });
+                closeDrawerOnSelection();
                 return;
             }
 
@@ -1924,12 +2006,17 @@ function setupSidebarNavigation() {
                 modeSelect.value = 'coding';
                 window.changeAIMode();
                 showFeedback({ title: 'Codex mode enabled', body: 'Your workspace is now set for coding and debugging support.', tone: 'success' });
+                closeDrawerOnSelection();
                 return;
             }
 
             if (action === 'more') {
-                sidebar.classList.toggle('collapsed');
-                showFeedback({ title: 'Sidebar refreshed', body: 'The workspace navigation can now expand or collapse smoothly.', tone: 'info' });
+                if (window.innerWidth > 1024) {
+                    sidebar.classList.toggle('collapsed');
+                    showFeedback({ title: 'Sidebar refreshed', body: 'The workspace navigation can now expand or collapse smoothly.', tone: 'info' });
+                } else {
+                    closeDrawerOnSelection();
+                }
             }
         });
     });
@@ -2224,28 +2311,47 @@ function setupVoiceInput() {
     recognition.lang = 'en-US'; // English-only speech model conversion
     recognition.interimResults = false;
 
+    const setListeningState = (isListening) => {
+        voiceBtn.classList.toggle('is-listening', isListening);
+        voiceBtn.setAttribute('aria-pressed', String(isListening));
+    };
+
+    const syncComposerState = () => {
+        const sendButton = document.querySelector('#chat-input-form [data-action="send"]');
+        const hasContent = String(textInput.value || '').trim().length > 0;
+        if (sendButton) {
+            sendButton.disabled = !hasContent && !attachedFileInstance;
+        }
+    };
+
     recognition.onstart = () => {
-        voiceBtn.textContent = 'Listening...';
-        voiceBtn.style.borderColor = '#000000';
+        setListeningState(true);
     };
 
     recognition.onerror = () => {
-        voiceBtn.textContent = 'Voice';
-        voiceBtn.style.borderColor = '#000000';
+        setListeningState(false);
     };
 
     recognition.onend = () => {
-        voiceBtn.textContent = 'Voice';
-        voiceBtn.style.borderColor = '#000000';
+        setListeningState(false);
     };
 
     recognition.onresult = (event) => {
         textInput.value = event.results[0][0].transcript;
+        syncComposerState();
     };
 
     voiceBtn.addEventListener('click', () => {
+        if (voiceBtn.classList.contains('is-listening')) {
+            recognition.stop();
+            return;
+        }
         recognition.start();
     });
+
+    textInput.addEventListener('input', syncComposerState);
+    textInput.addEventListener('change', syncComposerState);
+    syncComposerState();
 }
 
 // ==========================================
@@ -3101,6 +3207,22 @@ function setupMessagingSubmission() {
 
     form.dataset.msofiSubmissionBound = 'true';
     viewport.dataset.msofiViewportBound = 'true';
+
+    const autoResizeTextarea = () => {
+        const currentHeight = input.scrollHeight;
+        const nextHeight = Math.min(160, Math.max(44, currentHeight));
+        input.style.height = 'auto';
+        input.style.height = `${nextHeight}px`;
+    };
+
+    input.addEventListener('input', () => {
+        autoResizeTextarea();
+        const sendButton = form.querySelector('[data-action="send"]');
+        if (sendButton) {
+            sendButton.disabled = !String(input.value || '').trim().length && !attachedFileInstance;
+        }
+    });
+
     viewport.addEventListener('click', async (event) => {
         const downloadButton = event.target.closest('[data-book-download-url]');
         if (downloadButton) {
@@ -3193,7 +3315,7 @@ function setupMessagingSubmission() {
         if (!messageText && !attachedFileInstance) return;
 
         form.dataset.msofiSubmitting = 'true';
-        const submitButton = form.querySelector('button[type="submit"]');
+        const submitButton = form.querySelector('[data-action="send"]');
         if (submitButton) {
             submitButton.disabled = true;
         }
@@ -3201,6 +3323,9 @@ function setupMessagingSubmission() {
         const typedMessage = messageText;
         input.value = '';
         input.style.height = '';
+        if (typeof input.dispatchEvent === 'function') {
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+        }
         input.focus();
 
         try {

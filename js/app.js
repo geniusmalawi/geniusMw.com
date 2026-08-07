@@ -249,6 +249,13 @@ function setupVoiceSearch() {
 
     if (!voiceBtn || !searchInput) return;
 
+    const setVoiceButtonState = (state, label) => {
+        voiceBtn.classList.toggle('is-listening', state === 'listening');
+        voiceBtn.classList.toggle('is-error', state === 'error');
+        voiceBtn.setAttribute('aria-label', label);
+        voiceBtn.setAttribute('title', label);
+    };
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
         voiceBtn.style.display = 'none';
@@ -261,19 +268,16 @@ function setupVoiceSearch() {
     recognition.interimResults = false;
 
     recognition.onstart = () => {
-        voiceBtn.textContent = 'Listening...';
-        voiceBtn.style.borderColor = 'var(--heritage-red)';
+        setVoiceButtonState('listening', 'Listening for voice search');
     };
 
     recognition.onerror = (e) => {
         console.error('Speech recognition error event:', e.error);
-        voiceBtn.textContent = 'Voice';
-        voiceBtn.style.borderColor = 'var(--gold-base)';
+        setVoiceButtonState('error', 'Search using voice');
     };
 
     recognition.onend = () => {
-        voiceBtn.textContent = 'Voice';
-        voiceBtn.style.borderColor = 'var(--gold-base)';
+        setVoiceButtonState('idle', 'Search using voice');
     };
 
     recognition.onresult = (event) => {

@@ -75,17 +75,15 @@ serve(async (req) => {
       );
     }
 
-    // 1. Extract and log received request body
+    // 1. Extract the request payload
     const body = await req.json().catch(() => ({}));
-    console.log("Received request body:", body);
     
     const prompt = body.prompt || body.message || "";
     const conversation = body.conversation || [];
     const model = body.model || ""; 
 
-    // 2. Retrieve API key and log its existence (without leaking the raw token)
+    // 2. Retrieve API key without logging sensitive values
     const apiKey = Deno.env.get("GEMINI_API_KEY");
-    console.log("GEMINI_API_KEY exists:", !!apiKey);
 
     if (!apiKey) {
       const errMsg = "Configuration Error: GEMINI_API_KEY environment variable is not configured.";
@@ -154,17 +152,13 @@ serve(async (req) => {
 
     // 4. Try models sequentially until one succeeds
     for (const targetModel of modelsToTry) {
-      console.log(`Trying model: ${targetModel}`);
       attemptedModels.push(targetModel);
 
       try {
         const response = await tryGeminiModel(targetModel, contents, systemInstructionText, apiKey);
-        console.log(`Gemini HTTP status: ${response.status}`);
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
-          console.log("Complete Gemini error response:", errorData);
-          
           const detailedError = errorData?.error?.message || `Google Gemini API returned status: ${response.status}`;
           console.error(`Model failed: ${targetModel} - ${detailedError}`);
           finalDetailedError = detailedError;
@@ -180,7 +174,6 @@ serve(async (req) => {
           continue; // Try next fallback
         }
 
-        console.log(`Model succeeded: ${targetModel}`);
         successResponseData = data;
         successfulModel = targetModel;
         break; // Success achieved: Stop looping immediately

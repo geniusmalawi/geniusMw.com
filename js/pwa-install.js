@@ -226,7 +226,7 @@ function registerServiceWorker() {
         .then(registration => {
             if (registration.waiting) {
                 updateWaitingServiceWorker = registration.waiting;
-                showUpdateAvailable();
+                updateWaitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
             }
 
             registration.addEventListener('updatefound', () => {
@@ -235,7 +235,7 @@ function registerServiceWorker() {
                 installingWorker.addEventListener('statechange', () => {
                     if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
                         updateWaitingServiceWorker = installingWorker;
-                        showUpdateAvailable();
+                        updateWaitingServiceWorker.postMessage({ type: 'SKIP_WAITING' });
                     }
                 });
             });
@@ -245,7 +245,10 @@ function registerServiceWorker() {
         });
 
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-        window.location.reload();
+        if (!sessionStorage.getItem('genius_malawi_auto_reloaded')) {
+            sessionStorage.setItem('genius_malawi_auto_reloaded', '1');
+            window.location.reload();
+        }
     });
 }
 

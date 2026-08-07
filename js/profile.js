@@ -7,7 +7,7 @@
 // Dependencies: js/supabase.js
 // =====================================================================
 
-import { supabase, authAPI, storageAPI, validateFile } from './supabase.js';
+import { supabase, authAPI, storageAPI, validateFile, publishProfileUpdate } from './supabase.js';
 
 let currentUser = null;
 let userProfile = null;
@@ -144,12 +144,15 @@ function setupMediaUploaders() {
             }
 
             try {
-                displayAlert('Uploading avatar graphic, please wait...', 'success');
-                
-                // Upload to Supabase Storage Buckets
-                const uploadedUrl = await storageAPI.uploadFile(file, 'marketplace', 'avatar');
+                displayAlert('Uploading avatar graphic, please wait... 0%', 'success');
 
-                // Write URL reference to public.profiles table
+                const uploadedUrl = await storageAPI.uploadFile(file, 'marketplace', 'avatar', {
+                    onProgress: ({ percent }) => {
+                        const displayPercent = Number.isFinite(percent) ? Math.max(0, Math.min(100, Math.round(percent))) : 0;
+                        displayAlert(`Uploading avatar graphic, please wait... ${displayPercent}%`, 'success');
+                    }
+                });
+
                 const { error } = await supabase
                     .from('profiles')
                     .update({ profile_photo: uploadedUrl })
@@ -161,6 +164,7 @@ function setupMediaUploaders() {
 
                 // Sync local graphic node
                 document.getElementById('profile-avatar-img').src = uploadedUrl;
+                publishProfileUpdate({ profile_photo: uploadedUrl });
                 displayAlert('Profile Avatar successfully updated.', 'success');
 
             } catch (err) {
